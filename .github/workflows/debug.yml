@@ -23,7 +23,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: tts-server-lib
-          path: lib-gojni/libs/*.aar
+          path: lib-gojni-aar/*.aar
 
   build:
     needs: go-lib
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
             name: tts-server-lib
-            path: ${{ github.workspace }}/lib-gojni/libs
+            path: ${{ github.workspace }}/lib-gojni-aar
 
       - uses: actions/setup-java@v3
         with:
