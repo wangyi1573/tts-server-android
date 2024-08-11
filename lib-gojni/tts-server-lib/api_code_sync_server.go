@@ -17,7 +17,7 @@ type ScriptCodeSyncServerCallback interface {
 }
 
 type ScriptSyncServer struct {
-	server   sync_server.ScriptCodeSyncServer
+	server   sync_server.CodeSyncServer
 	callback ScriptCodeSyncServerCallback
 }
 

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-type ScriptCodeSyncServer struct {
+type CodeSyncServer struct {
 	// OnPush 接收来自客户端代码
 	OnPush func(code string)
 	// OnPull 发送代码到客户端
@@ -23,7 +23,7 @@ type ScriptCodeSyncServer struct {
 	Log *log.Logger
 }
 
-func (p *ScriptCodeSyncServer) handleFunc() {
+func (p *CodeSyncServer) handleFunc() {
 	if p.serveMux == nil {
 		p.serveMux = http.NewServeMux()
 	}
@@ -33,7 +33,7 @@ func (p *ScriptCodeSyncServer) handleFunc() {
 	p.serveMux.Handle("/api/sync/action", http.TimeoutHandler(http.HandlerFunc(p.editorActionHandler), 15*time.Second, "timeout"))
 }
 
-func (p *ScriptCodeSyncServer) Start(port int64) error {
+func (p *CodeSyncServer) Start(port int64) error {
 	if p.Log == nil {
 		p.Log = log.New()
 	}
@@ -59,14 +59,14 @@ func (p *ScriptCodeSyncServer) Start(port int64) error {
 	p.Log.Infoln("server closed")
 	return nil
 }
-func (p *ScriptCodeSyncServer) Close(timeout time.Duration) error {
+func (p *CodeSyncServer) Close(timeout time.Duration) error {
 	p.Log.Infoln("shutting down server...")
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	return p.server.Shutdown(ctx)
 }
 
-func (p *ScriptCodeSyncServer) pluginPushHandler(w http.ResponseWriter, r *http.Request) {
+func (p *CodeSyncServer) pluginPushHandler(w http.ResponseWriter, r *http.Request) {
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		p.Log.Warnln(err)
@@ -75,7 +75,7 @@ func (p *ScriptCodeSyncServer) pluginPushHandler(w http.ResponseWriter, r *http.
 	p.OnPush(string(bytes))
 }
 
-func (p *ScriptCodeSyncServer) pluginPullHandler(w http.ResponseWriter, r *http.Request) {
+func (p *CodeSyncServer) pluginPullHandler(w http.ResponseWriter, r *http.Request) {
 	code, err := p.OnPull()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -89,7 +89,7 @@ func (p *ScriptCodeSyncServer) pluginPullHandler(w http.ResponseWriter, r *http.
 	}
 }
 
-func (p *ScriptCodeSyncServer) editorActionHandler(w http.ResponseWriter, r *http.Request) {
+func (p *CodeSyncServer) editorActionHandler(w http.ResponseWriter, r *http.Request) {
 	u := r.URL.Query()
 	action := u.Get("action")
 

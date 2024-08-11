@@ -21,7 +21,7 @@ func (testCallback) Log(level int32, msg string) {
 	fmt.Printf("log: %d, %s\n", level, msg)
 }
 
-func (testCallback) GetAudio(engine string, text string, rate int32) (file string, err error) {
+func (testCallback) GetAudio(engine string, voice string, text string, rate int32, pitch int32) (file string, err error) {
 	return "", nil
 }
 

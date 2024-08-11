@@ -11,5 +11,5 @@ go get golang.org/x/mobile/bind
 然后构建：
 gomobile bind -v -target="android/arm,android/arm64" -androidapi=19
 
-最后将 tts_server_lib.aar 移动到 app/libs 目录下
+最后将 tts_server_lib.aar 移动到 ../libs 目录下
 ```
