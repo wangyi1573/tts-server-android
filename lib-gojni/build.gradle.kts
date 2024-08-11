@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -25,9 +24,6 @@ android {
         }
     }
 
-    repositories {
-
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -38,7 +34,7 @@ android {
 }
 
 dependencies {
-    api(fileTree("include" to listOf("*.jar", "*.aar"), "dir" to "libs"))
+    implementation(project(":lib-gojni-aar", configuration = "default"))
 
     implementation(libs.coreKtx)
     implementation(libs.appcompat)

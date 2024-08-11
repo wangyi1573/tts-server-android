@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 rootProject.name = "TTS Server"
 include ':app'
 include ':lib-gojni'
+include ':lib-gojni-aar'
 //include ':lib-tts'
 //include ':lib-script-engine'
 //include ':lib-common'
