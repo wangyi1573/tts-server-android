@@ -19,7 +19,7 @@ import com.github.jing332.tts_server_android.compose.nav.NavTopAppBar
 import com.github.jing332.tts_server_android.compose.widgets.LocalBroadcastReceiver
 import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
-import com.github.jing332.tts_server_android.ui.AppLog
+import com.github.jing332.tts_server_android.constant.AppLog
 
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)

@@ -16,10 +16,9 @@ import androidx.core.content.ContextCompat
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.KeyConst
-import com.github.jing332.tts_server_android.ui.AppLog
+import com.github.jing332.tts_server_android.constant.AppLog
 import com.github.jing332.tts_server_android.constant.LogLevel
 import com.github.jing332.lib_gojni.NativeUtils
-import com.github.jing332.lib_gojni.TtsGoNative
 import com.github.jing332.tts_server_android.ui.ImportConfigActivity
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.registerGlobalReceiver

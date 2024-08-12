@@ -8,7 +8,7 @@ import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.CnLocalMap
 import com.github.jing332.tts_server_android.constant.MsTtsApiType
 import com.github.jing332.lib_gojni.TtsGoNative
-import com.github.jing332.tts_server_android.utils.FileUtils
+import com.github.jing332.common.utils.FileUtils
 import java.io.File
 import java.util.*
 

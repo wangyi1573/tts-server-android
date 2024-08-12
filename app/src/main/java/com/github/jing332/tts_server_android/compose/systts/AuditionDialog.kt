@@ -27,8 +27,8 @@ import com.github.jing332.tts_server_android.compose.widgets.AppDialog
 import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
-import com.github.jing332.tts_server_android.help.audio.AudioDecoder
-import com.github.jing332.tts_server_android.help.audio.AudioPlayer
+import com.github.jing332.common.audio.AudioDecoder
+import com.github.jing332.common.audio.AudioPlayer
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.StringUtils.sizeToReadable
 import com.github.jing332.tts_server_android.utils.clickableRipple
@@ -44,7 +44,7 @@ fun AuditionDialog(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val audioPlayer = remember { AudioPlayer(context) }
+    val audioPlayer = remember { com.github.jing332.common.audio.AudioPlayer(context) }
 
     var error by remember { mutableStateOf("") }
 
@@ -57,7 +57,7 @@ fun AuditionDialog(
                 systts.tts.getAudioWithSystemParams(text)
                     ?.use { ins ->
                         val audio = ins.readBytes()
-                        val info = AudioDecoder.getSampleRateAndMime(audio)
+                        val info = com.github.jing332.common.audio.AudioDecoder.getSampleRateAndMime(audio)
                         if (audio.isEmpty()) {
                             error = context.getString(R.string.systts_log_audio_empty, "")
                             return@launch

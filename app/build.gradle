@@ -167,6 +167,7 @@ android {
 }
 
 dependencies {
+    api(project(":lib-common"))
     implementation(project(":lib-gojni"))
     coreLibraryDesugaring(libs.desugar)
 

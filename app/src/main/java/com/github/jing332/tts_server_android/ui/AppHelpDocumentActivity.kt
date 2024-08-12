@@ -26,7 +26,7 @@ import androidx.core.widget.NestedScrollView
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
-import com.github.jing332.tts_server_android.utils.FileUtils.readAllText
+import com.github.jing332.common.utils.FileUtils.readAllText
 import com.github.jing332.tts_server_android.utils.dp
 import com.github.jing332.tts_server_android.utils.toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

@@ -4,17 +4,18 @@ import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioTrack
 import android.util.Log
+import androidx.media3.exoplayer.audio.SilenceSkippingAudioProcessor
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.constant.AppPattern
 import com.github.jing332.tts_server_android.constant.ReplaceExecution
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.tts_server_android.help.audio.AudioDecoder
-import com.github.jing332.tts_server_android.help.audio.AudioDecoder.Companion.readPcmChunk
-import com.github.jing332.tts_server_android.help.audio.ExoAudioPlayer
-import com.github.jing332.tts_server_android.help.audio.Sonic
-import com.github.jing332.tts_server_android.help.audio.exo.ExoAudioDecoder
+import com.github.jing332.common.audio.AudioDecoder
+import com.github.jing332.common.audio.AudioDecoder.Companion.readPcmChunk
+import com.github.jing332.common.audio.ExoAudioPlayer
+import com.github.jing332.common.audio.Sonic
+import com.github.jing332.common.audio.exo.ExoAudioDecoder
 import com.github.jing332.tts_server_android.model.speech.ITextToSpeechSynthesizer
 import com.github.jing332.tts_server_android.model.speech.TtsTextSegment
 import com.github.jing332.tts_server_android.model.speech.tts.BaseAudioFormat
@@ -248,9 +249,9 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
     }
 
     private val mTextReplacer = TextReplacer()
-    private val mAudioDecoder = AudioDecoder()
-    private val mExoDecoder by lazy { ExoAudioDecoder(context) }
-    private var mAudioPlayer: ExoAudioPlayer? = null
+    private val mAudioDecoder = com.github.jing332.common.audio.AudioDecoder()
+    private val mExoDecoder by lazy { com.github.jing332.common.audio.exo.ExoAudioDecoder(context) }
+    private var mAudioPlayer: com.github.jing332.common.audio.ExoAudioPlayer? = null
     private var mBgmPlayer: BgmPlayer? = null
 
     private fun getEnabledList(target: Int, isStandby: Boolean): List<ITextToSpeechEngine> {
@@ -428,9 +429,11 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
             val srcSampleRate = txtTts.tts.audioFormat.sampleRate
             val targetSampleRate = audioFormat.sampleRate
 
+            SilenceSkippingAudioProcessor
+
             val sonic =
                 if (audioParams.isDefaultValue && srcSampleRate == targetSampleRate) null
-                else Sonic(txtTts.tts.audioFormat.sampleRate, 1)
+                else com.github.jing332.common.audio.Sonic(txtTts.tts.audioFormat.sampleRate, 1)
             txtTts.playAudio(
                 sysRate, sysPitch, data.audio,
                 onDone = { data.done.invoke() })
@@ -548,7 +551,7 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
             SysTtsConfig.inAppPlayPitch
         )
 
-        mAudioPlayer = mAudioPlayer ?: ExoAudioPlayer(context)
+        mAudioPlayer = mAudioPlayer ?: com.github.jing332.common.audio.ExoAudioPlayer(context)
         if (SysTtsConfig.isStreamPlayModeEnabled)
             mAudioPlayer?.play(inputStream!!, params.rate, params.volume, params.pitch)
         else
@@ -562,7 +565,7 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
         onPcmAudio: (pcmAudio: ByteArray) -> Unit,
     ) {
         if (useExoDecoder) {
-            mExoDecoder.callback = ExoAudioDecoder.Callback { byteBuffer ->
+            mExoDecoder.callback = com.github.jing332.common.audio.exo.ExoAudioDecoder.Callback { byteBuffer ->
                 val buffer = ByteArray(byteBuffer.remaining())
                 byteBuffer.get(buffer)
                 onPcmAudio.invoke(buffer)

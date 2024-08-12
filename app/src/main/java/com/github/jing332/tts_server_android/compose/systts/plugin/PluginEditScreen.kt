@@ -33,7 +33,7 @@ import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.data.entities.plugin.Plugin
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.FileUtils.readAllText
+import com.github.jing332.common.utils.FileUtils.readAllText
 import com.github.jing332.tts_server_android.utils.longToast
 import io.github.rosemoe.sora.widget.CodeEditor
 

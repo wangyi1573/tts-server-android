@@ -2,10 +2,10 @@ package com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widget
 
 import androidx.lifecycle.ViewModel
 import com.github.jing332.tts_server_android.app
-import com.github.jing332.tts_server_android.help.audio.AudioPlayer
+import com.github.jing332.common.audio.AudioPlayer
 
 open class BaseViewModel : ViewModel() {
-    val audioPlayer by lazy { AudioPlayer(app) }
+    val audioPlayer by lazy { com.github.jing332.common.audio.AudioPlayer(app) }
 
     override fun onCleared() {
         super.onCleared()

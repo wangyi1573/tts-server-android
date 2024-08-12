@@ -9,8 +9,8 @@ import com.github.jing332.tts_server_android.data.entities.SpeechRule
 import com.github.jing332.tts_server_android.data.entities.plugin.Plugin
 import com.github.jing332.tts_server_android.data.entities.replace.GroupWithReplaceRule
 import com.github.jing332.tts_server_android.data.entities.systts.GroupWithSystemTts
-import com.github.jing332.tts_server_android.utils.FileUtils
-import com.github.jing332.tts_server_android.utils.ZipUtils
+import com.github.jing332.common.utils.FileUtils
+import com.github.jing332.common.utils.ZipUtils
 import kotlinx.serialization.encodeToString
 import java.io.ByteArrayInputStream
 import java.io.File

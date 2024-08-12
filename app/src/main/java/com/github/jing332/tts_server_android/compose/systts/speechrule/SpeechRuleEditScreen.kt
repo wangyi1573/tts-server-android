@@ -24,7 +24,7 @@ import com.github.jing332.tts_server_android.compose.widgets.TextFieldDialog
 import com.github.jing332.tts_server_android.conf.SpeechRuleConfig
 import com.github.jing332.tts_server_android.data.entities.SpeechRule
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.FileUtils.readAllText
+import com.github.jing332.common.utils.FileUtils.readAllText
 import io.github.rosemoe.sora.widget.CodeEditor
 
 @Composable

@@ -26,7 +26,7 @@ import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.constant.LogLevel
 import com.github.jing332.tts_server_android.constant.SystemNotificationConst
 import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.tts_server_android.help.audio.AudioDecoderException
+import com.github.jing332.common.audio.AudioDecoderException
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.model.speech.tts.ITextToSpeechEngine
 import com.github.jing332.tts_server_android.service.systts.help.TextToSpeechManager
@@ -36,8 +36,7 @@ import com.github.jing332.tts_server_android.service.systts.help.exception.Reque
 import com.github.jing332.tts_server_android.service.systts.help.exception.SpeechRuleException
 import com.github.jing332.tts_server_android.service.systts.help.exception.TextReplacerException
 import com.github.jing332.tts_server_android.service.systts.help.exception.TtsManagerException
-import com.github.jing332.tts_server_android.ui.AppLog
-import com.github.jing332.tts_server_android.ui.ImportConfigActivity
+import com.github.jing332.tts_server_android.constant.AppLog
 import com.github.jing332.tts_server_android.utils.GcManager
 import com.github.jing332.tts_server_android.utils.StringUtils.limitLength
 import com.github.jing332.tts_server_android.utils.longToast
@@ -465,7 +464,7 @@ class SystemTtsService : TextToSpeechService(), TextToSpeechManager.Listener {
             }
 
             is PlayException -> {
-                if (e.cause is AudioDecoderException) {
+                if (e.cause is com.github.jing332.common.audio.AudioDecoderException) {
                     logE("解码失败: ${e.cause?.localizedMessage}")
                 } else
                     logE("播放失败: ${e.localizedMessage}")

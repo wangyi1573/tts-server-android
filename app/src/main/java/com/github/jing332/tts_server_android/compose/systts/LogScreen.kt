@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.ui.AppLog
+import com.github.jing332.tts_server_android.constant.AppLog
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.toAnnotatedString
 import com.github.jing332.tts_server_android.utils.toast

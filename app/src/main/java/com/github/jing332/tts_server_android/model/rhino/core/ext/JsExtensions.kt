@@ -2,8 +2,7 @@ package com.github.jing332.tts_server_android.model.rhino.core.ext
 
 import android.content.Context
 import cn.hutool.core.lang.UUID
-import com.github.jing332.tts_server_android.help.audio.AudioDecoder
-import com.github.jing332.tts_server_android.utils.FileUtils
+import com.github.jing332.common.utils.FileUtils
 import java.io.File
 import java.io.InputStream
 
@@ -13,7 +12,7 @@ open class JsExtensions(open val context: Context, open val engineId: String) : 
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun getAudioSampleRate(audio: ByteArray): Int {
-        return AudioDecoder.getSampleRateAndMime(audio).first
+        return com.github.jing332.common.audio.AudioDecoder.getSampleRateAndMime(audio).first
     }
 
     fun getAudioSampleRate(ins: InputStream): Int {

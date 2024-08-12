@@ -37,8 +37,8 @@ import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.constant.FilePickerMode
 import com.github.jing332.tts_server_android.help.ByteArrayBinder
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.FileUtils
-import com.github.jing332.tts_server_android.utils.FileUtils.mimeType
+import com.github.jing332.common.utils.FileUtils
+import com.github.jing332.common.utils.FileUtils.mimeType
 import com.github.jing332.tts_server_android.utils.getBinder
 import com.github.jing332.tts_server_android.utils.grantReadWritePermission
 import com.github.jing332.tts_server_android.utils.toast
