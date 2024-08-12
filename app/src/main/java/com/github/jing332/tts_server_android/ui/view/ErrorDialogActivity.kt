@@ -39,10 +39,10 @@ import com.drake.net.utils.withIO
 import com.github.jing332.lib_gojni.NativeUtils
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.constant.AppConst
-import com.github.jing332.tts_server_android.utils.ClipboardUtils
+import com.github.jing332.common.utils.ClipboardUtils
 import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.rootCause
 import com.github.jing332.common.utils.toast

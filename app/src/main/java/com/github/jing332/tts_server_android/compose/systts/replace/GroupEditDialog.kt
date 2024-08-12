@@ -18,11 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.TextCheckBox
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.TextCheckBox
 import com.github.jing332.tts_server_android.constant.ReplaceExecution
 import com.github.jing332.tts_server_android.data.entities.replace.ReplaceRuleGroup
-import com.github.jing332.tts_server_android.utils.clickableRipple
+import  com.github.jing332.compose.ComposeExtensions.clickableRipple
 
 @Composable
 internal fun GroupEditDialog(

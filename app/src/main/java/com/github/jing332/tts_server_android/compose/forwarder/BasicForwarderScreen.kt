@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.LocalBroadcastReceiver
+import com.github.jing332.compose.widgets.LocalBroadcastReceiver
 import com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState

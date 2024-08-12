@@ -4,14 +4,15 @@ import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioTrack
 import android.util.Log
-import androidx.media3.exoplayer.audio.SilenceSkippingAudioProcessor
+import com.github.jing332.common.audio.AudioDecoder.Companion.readPcmChunk
+import com.github.jing332.common.utils.longToast
+import com.github.jing332.common.utils.toast
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.constant.AppPattern
 import com.github.jing332.tts_server_android.constant.ReplaceExecution
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.common.audio.AudioDecoder.Companion.readPcmChunk
 import com.github.jing332.tts_server_android.model.speech.ITextToSpeechSynthesizer
 import com.github.jing332.tts_server_android.model.speech.TtsTextSegment
 import com.github.jing332.tts_server_android.model.speech.tts.BaseAudioFormat
@@ -25,8 +26,6 @@ import com.github.jing332.tts_server_android.service.systts.help.exception.Reque
 import com.github.jing332.tts_server_android.service.systts.help.exception.SpeechRuleException
 import com.github.jing332.tts_server_android.service.systts.help.exception.TtsManagerException
 import com.github.jing332.tts_server_android.utils.StringUtils
-import com.github.jing332.common.utils.longToast
-import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -425,7 +424,6 @@ class TextToSpeechManager(val context: Context) : ITextToSpeechSynthesizer<IText
             val srcSampleRate = txtTts.tts.audioFormat.sampleRate
             val targetSampleRate = audioFormat.sampleRate
 
-            SilenceSkippingAudioProcessor
 
             val sonic =
                 if (audioParams.isDefaultValue && srcSampleRate == targetSampleRate) null

@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import com.github.jing332.common.utils.ClipboardUtils
 import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.runOnUI
 import com.github.jing332.common.utils.toast

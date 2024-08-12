@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.nav.NavTopAppBar
-import com.github.jing332.tts_server_android.compose.widgets.LocalBroadcastReceiver
+import com.github.jing332.compose.widgets.LocalBroadcastReceiver
 import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import com.github.jing332.tts_server_android.constant.AppLog

@@ -2,9 +2,8 @@ package com.github.jing332.tts_server_android.model.rhino.tts
 
 import android.content.Context
 import android.widget.LinearLayout
-import com.github.jing332.tts_server_android.constant.AppConst
+import com.github.jing332.common.utils.dp
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
-import com.github.jing332.tts_server_android.utils.dp
 import org.mozilla.javascript.NativeObject
 import java.util.Locale
 
@@ -31,11 +30,7 @@ class TtsPluginUiEngine(
     }
 
     private val editUiJsObject: NativeObject by lazy {
-        val importCode = "importPackage(${AppConst.PACKET_NAME}.model.rhino.core.type.ui);" +
-                "importPackage(android.view);" +
-                "importPackage(android.widget);"
-
-        eval(importCode)
+        eval()
         findObject(OBJ_UI_JS)
     }
 

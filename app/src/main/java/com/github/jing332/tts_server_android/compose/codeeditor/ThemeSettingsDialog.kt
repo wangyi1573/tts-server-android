@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppSelectionDialog
+import com.github.jing332.compose.widgets.AppSelectionDialog
 import com.github.jing332.tts_server_android.conf.CodeEditorConfig
 import com.github.jing332.tts_server_android.constant.CodeEditorTheme
 

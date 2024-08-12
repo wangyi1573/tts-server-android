@@ -8,9 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
-import com.github.jing332.tts_server_android.compose.widgets.LabelSlider
-import com.github.jing332.tts_server_android.utils.ThrottleUtil
-import com.github.jing332.tts_server_android.utils.toScale
+import com.github.jing332.common.utils.ThrottleUtil
+import com.github.jing332.common.utils.toScale
+import com.github.jing332.compose.widgets.LabelSlider
 
 @Suppress("unused")
 @SuppressLint("ViewConstructor")

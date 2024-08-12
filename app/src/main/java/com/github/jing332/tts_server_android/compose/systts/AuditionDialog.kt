@@ -22,15 +22,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.drake.net.utils.withMain
+import com.github.jing332.common.utils.ClipboardUtils
+import com.github.jing332.common.utils.toast
+import com.github.jing332.compose.ComposeExtensions.clickableRipple
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
-import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.StringUtils.sizeToReadable
-import com.github.jing332.tts_server_android.utils.clickableRipple
-import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -43,9 +43,9 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.list.BasicAudioParamsDialog
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.SaveActionHandler
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.InternalPlayerDialog
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.AppSpinner
-import com.github.jing332.tts_server_android.compose.widgets.RowToggleButtonGroup
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.AppSpinner
+import com.github.jing332.compose.widgets.RowToggleButtonGroup
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.appDb
@@ -58,8 +58,8 @@ import com.github.jing332.tts_server_android.data.entities.systts.SystemTtsGroup
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
 import com.github.jing332.tts_server_android.model.speech.tts.ITextToSpeechEngine
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.ClipboardUtils
-import com.github.jing332.tts_server_android.utils.clone
+import com.github.jing332.common.utils.ClipboardUtils
+import com.github.jing332.common.utils.clone
 import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.toast
 import kotlinx.serialization.encodeToString

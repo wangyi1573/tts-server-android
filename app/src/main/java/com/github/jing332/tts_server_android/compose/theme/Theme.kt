@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import com.github.jing332.tts_server_android.compose.widgets.SetupSystemBars
+import com.github.jing332.compose.widgets.SetupSystemBars
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.gyf.immersionbar.ImmersionBar
 

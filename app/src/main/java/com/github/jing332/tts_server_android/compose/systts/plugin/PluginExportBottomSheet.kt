@@ -19,7 +19,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.ConfigExportBottomSheet
-import com.github.jing332.tts_server_android.compose.widgets.TextCheckBox
+import com.github.jing332.compose.widgets.TextCheckBox
 
 @Composable
 internal fun PluginExportBottomSheet(

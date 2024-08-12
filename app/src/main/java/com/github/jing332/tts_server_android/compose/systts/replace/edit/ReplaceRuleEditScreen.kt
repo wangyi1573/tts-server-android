@@ -56,8 +56,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.systts.AuditionDialog
-import com.github.jing332.tts_server_android.compose.widgets.AppSpinner
-import com.github.jing332.tts_server_android.compose.widgets.TextCheckBox
+import com.github.jing332.compose.widgets.AppSpinner
+import com.github.jing332.compose.widgets.TextCheckBox
 import com.github.jing332.tts_server_android.conf.ReplaceRuleConfig
 import com.github.jing332.tts_server_android.data.appDb
 import com.github.jing332.tts_server_android.data.entities.replace.ReplaceRule

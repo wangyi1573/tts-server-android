@@ -41,10 +41,10 @@ import com.github.jing332.tts_server_android.compose.systts.list.IntSlider
 import com.github.jing332.tts_server_android.compose.systts.list.edit.BasicInfoEditScreen
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.AuditionTextField
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.TtsTopAppBar
-import com.github.jing332.tts_server_android.compose.widgets.AppSpinner
-import com.github.jing332.tts_server_android.compose.widgets.DenseOutlinedField
-import com.github.jing332.tts_server_android.compose.widgets.LabelSlider
-import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
+import com.github.jing332.compose.widgets.AppSpinner
+import com.github.jing332.compose.widgets.DenseOutlinedField
+import com.github.jing332.compose.widgets.LabelSlider
+import com.github.jing332.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
 import com.github.jing332.tts_server_android.model.speech.tts.LocalTTS
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog

@@ -22,11 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
-import com.github.jing332.tts_server_android.compose.widgets.AppBottomSheet
-import com.github.jing332.tts_server_android.compose.widgets.HtmlText
+import com.github.jing332.compose.widgets.AppBottomSheet
+import com.github.jing332.compose.widgets.HtmlText
 import com.github.jing332.tts_server_android.data.appDb
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
-import com.github.jing332.tts_server_android.utils.clickableRipple
+import  com.github.jing332.compose.ComposeExtensions.clickableRipple
 
 @Preview
 @Composable

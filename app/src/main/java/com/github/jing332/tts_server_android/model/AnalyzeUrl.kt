@@ -1,7 +1,6 @@
 package com.github.jing332.tts_server_android.model
 
 import com.github.jing332.tts_server_android.constant.AppConst
-import com.github.jing332.tts_server_android.constant.AppConst.SCRIPT_ENGINE
 import com.script.SimpleBindings
 import kotlinx.serialization.decodeFromString
 import java.util.regex.Pattern
@@ -26,8 +25,8 @@ class AnalyzeUrl(
                 matcher.group().replace("{{", "").replace("}}", "").replace("java.", "")
 
             kotlin.runCatching {
-                val result = evalJs(jsCodeStr)
-                matcher.appendReplacement(sb, result.toString())
+//                val result = evalJs(jsCodeStr)
+                matcher.appendReplacement(sb," result.toString()")
             }.onFailure {
                 throw Exception("执行 $jsCodeStr 时出错", it)
             }
@@ -51,13 +50,13 @@ class AnalyzeUrl(
 
 
     // 执行js 替换变量
-    private fun evalJs(jsStr: String): Any? {
-        val bindings = SimpleBindings()
-        bindings["speakText"] = speakText
-        bindings["speakSpeed"] = speakSpeed
-        bindings["speakVolume"] = speakVolume
-        return SCRIPT_ENGINE.eval(jsStr, bindings)
-    }
+//    private fun evalJs(jsStr: String): Any? {
+//        val bindings = SimpleBindings()
+//        bindings["speakText"] = speakText
+//        bindings["speakSpeed"] = speakSpeed
+//        bindings["speakVolume"] = speakVolume
+//        return SCRIPT_ENGINE.eval(jsStr, bindings)
+//    }
 
     // url中的参数
     @kotlinx.serialization.Serializable

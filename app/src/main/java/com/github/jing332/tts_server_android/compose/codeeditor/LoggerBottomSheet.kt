@@ -21,7 +21,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.github.jing332.tts_server_android.compose.widgets.AppBottomSheet
+import com.github.jing332.compose.widgets.AppBottomSheet
 import com.github.jing332.common.LogLevel
 
 @OptIn(ExperimentalMaterial3Api::class)

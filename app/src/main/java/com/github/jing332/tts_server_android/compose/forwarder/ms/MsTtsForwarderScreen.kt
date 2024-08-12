@@ -22,7 +22,7 @@ import com.github.jing332.tts_server_android.compose.forwarder.BasicConfigScreen
 import com.github.jing332.tts_server_android.compose.forwarder.BasicForwarderScreen
 import com.github.jing332.tts_server_android.compose.forwarder.ConfigViewModel
 import com.github.jing332.tts_server_android.compose.forwarder.ForwarderTopAppBar
-import com.github.jing332.tts_server_android.compose.widgets.TextFieldDialog
+import com.github.jing332.compose.widgets.TextFieldDialog
 import com.github.jing332.tts_server_android.conf.MsTtsForwarderConfig
 import com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.switchMsTtsForwarder
 import com.github.jing332.tts_server_android.service.forwarder.ms.MsTtsForwarderService

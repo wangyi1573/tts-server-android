@@ -25,12 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.jing332.common.DateFormatConst
+import com.github.jing332.common.utils.ClipboardUtils
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.Markdown
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.Markdown
-import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.model.updater.AppUpdateChecker
-import com.github.jing332.tts_server_android.utils.ClipboardUtils
 
 @Preview
 @Composable
@@ -101,8 +100,7 @@ fun AppUpdateDialog(
         ClipboardUtils.copyText("TTS Server", url)
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
-
-    AppDialog(onDismissRequest = onDismissRequest,
+   AppDialog(onDismissRequest = onDismissRequest,
         title = {
             Text(
                 stringResource(id = R.string.check_update),

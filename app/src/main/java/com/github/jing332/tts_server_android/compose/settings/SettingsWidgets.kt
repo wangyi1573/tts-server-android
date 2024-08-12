@@ -36,8 +36,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.LabelSlider
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.LabelSlider
 
 @Composable
 internal fun DropdownPreference(

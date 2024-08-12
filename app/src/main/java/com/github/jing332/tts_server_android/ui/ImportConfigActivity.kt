@@ -15,7 +15,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.LocalImportFilePath
 import com.github.jing332.tts_server_android.compose.systts.LocalImportRemoteUrl
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
-import com.github.jing332.tts_server_android.compose.widgets.AppSelectionDialog
+import com.github.jing332.compose.widgets.AppSelectionDialog
 import com.github.jing332.tts_server_android.ui.systts.ImportConfigFactory
 import com.github.jing332.tts_server_android.ui.systts.ImportConfigFactory.gotoEditorFromJS
 import com.github.jing332.tts_server_android.ui.systts.ImportType

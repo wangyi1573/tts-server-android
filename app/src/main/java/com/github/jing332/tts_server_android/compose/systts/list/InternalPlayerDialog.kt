@@ -9,10 +9,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.LabelSlider
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.LabelSlider
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
-import com.github.jing332.tts_server_android.utils.toScale
+import com.github.jing332.common.utils.toScale
 
 @Composable
 fun InternalPlayerDialog(onDismissRequest: () -> Unit) {

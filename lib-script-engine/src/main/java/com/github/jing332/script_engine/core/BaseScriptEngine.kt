@@ -28,7 +28,7 @@ open class BaseScriptEngine(
 
     @Synchronized
     open fun eval(
-        prefixCode: String = ""
+        prefixCode: String = PackageImporter.default
     ): Any? {
         putDefaultObjects()
 

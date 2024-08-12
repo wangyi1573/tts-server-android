@@ -16,9 +16,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.AppDialog
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
-import com.github.jing332.tts_server_android.utils.clickableRipple
+import  com.github.jing332.compose.ComposeExtensions.clickableRipple
 
 @Composable
 fun BgmSettingsDialog(onDismissRequest: () -> Unit) {

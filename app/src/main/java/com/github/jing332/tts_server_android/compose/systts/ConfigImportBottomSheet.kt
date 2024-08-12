@@ -46,13 +46,13 @@ import com.drake.net.Net
 import com.drake.net.okhttp.trustSSLCertificate
 import com.drake.net.utils.withMain
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppBottomSheet
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.RowToggleButtonGroup
+import com.github.jing332.compose.widgets.AppBottomSheet
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.RowToggleButtonGroup
 import com.github.jing332.tts_server_android.ui.AppActivityResultContracts
 import com.github.jing332.tts_server_android.ui.FilePickerActivity
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.ClipboardUtils
+import com.github.jing332.common.utils.ClipboardUtils
 import com.github.jing332.common.utils.FileUtils.readAllText
 import com.github.jing332.common.utils.longToast
 import com.github.jing332.tts_server_android.utils.toJsonListString

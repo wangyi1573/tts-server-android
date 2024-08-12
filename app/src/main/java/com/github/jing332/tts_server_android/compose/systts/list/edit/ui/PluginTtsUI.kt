@@ -31,9 +31,9 @@ import com.github.jing332.tts_server_android.compose.systts.list.IntSlider
 import com.github.jing332.tts_server_android.compose.systts.list.edit.BasicInfoEditScreen
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.AuditionTextField
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.TtsTopAppBar
-import com.github.jing332.tts_server_android.compose.widgets.AppSpinner
-import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
-import com.github.jing332.tts_server_android.compose.widgets.LoadingDialog
+import com.github.jing332.compose.widgets.AppSpinner
+import com.github.jing332.compose.widgets.LoadingContent
+import com.github.jing332.compose.widgets.LoadingDialog
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
 import com.github.jing332.tts_server_android.model.speech.tts.BaseAudioFormat
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS

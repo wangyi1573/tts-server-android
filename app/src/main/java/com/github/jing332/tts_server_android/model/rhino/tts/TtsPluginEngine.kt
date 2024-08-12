@@ -4,8 +4,6 @@ import android.content.Context
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.data.entities.plugin.Plugin
-import com.github.jing332.script_engine.core.BaseScriptEngine
-import com.github.jing332.script_engine.core.Logger
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 import com.script.javascript.RhinoScriptEngine
 import org.mozilla.javascript.NativeObject
@@ -41,11 +39,6 @@ open class TtsPluginEngine(
         const val FUNC_ON_STOP = "onStop"
     }
 
-    @Synchronized
-    override fun eval(prefixCode: String): Any? {
-        return super.eval("$prefixCode ;importPackage(${AppConst.PACKET_NAME}.model.rhino.core.type.ws)")
-    }
-
     // 已弃用, 占位
     @Suppress("unused")
     var extraData: String = ""
@@ -71,7 +64,7 @@ open class TtsPluginEngine(
             } catch (t: Throwable) {
                 mPlugin.defVars = emptyMap()
 
-                throw ClassCastException("\"vars\" bad format" ).initCause(t)
+                throw ClassCastException("\"vars\" bad format").initCause(t)
             }
 
             runCatching {
@@ -98,7 +91,7 @@ open class TtsPluginEngine(
     @Synchronized
     fun onStop(): Any? {
         logger.d("onStop()...")
-        ttsrvObject.cancel()
+        ttsrvObject.cancelNetwork()
         try {
             return rhino.invokeMethod(pluginJsObject, FUNC_ON_STOP)
         } catch (_: NoSuchMethodException) {

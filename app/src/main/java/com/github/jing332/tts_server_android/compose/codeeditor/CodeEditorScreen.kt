@@ -12,10 +12,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
 import androidx.compose.material.icons.automirrored.filled.WrapText
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.InsertDriveFile
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.SettingsRemote
@@ -43,14 +43,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.jing332.compose.ComposeExtensions.clickableRipple
+import com.github.jing332.compose.widgets.CheckedMenuItem
+import com.github.jing332.compose.widgets.LongClickIconButton
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.CheckedMenuItem
-import com.github.jing332.tts_server_android.compose.widgets.LongClickIconButton
 import com.github.jing332.tts_server_android.conf.CodeEditorConfig
 import com.github.jing332.tts_server_android.ui.AppActivityResultContracts
 import com.github.jing332.tts_server_android.ui.FilePickerActivity
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.clickableRipple
 import io.github.rosemoe.sora.widget.CodeEditor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -157,7 +157,7 @@ fun CodeEditorScreen(
                                             )
                                         }
                                     },
-                                    leadingIcon = { Icon(Icons.Default.InsertDriveFile, null) }
+                                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null) }
                                 )
 
                             var syncEnabled by remember { CodeEditorConfig.isRemoteSyncEnabled }

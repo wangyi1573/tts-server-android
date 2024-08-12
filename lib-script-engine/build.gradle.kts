@@ -30,14 +30,30 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions{
+        kotlinCompilerExtensionVersion = libs.versions.composeComplile.get()
+    }
+
+    packaging {
+        resources {
+            excludes += setOf("META-INF/INDEX.LIST", "META-INF/*.md")
+        }
+    }
 }
 
 dependencies {
-    implementation(fileTree("include" to listOf("*.jar"), "dir" to "libs"))
+    api(fileTree("include" to listOf("*.jar"), "dir" to "libs"))
 
     api(project(":lib-common"))
-    implementation(libs.hutool.crypto)
+    api(project(":lib-compose"))
 
+    implementation(libs.hutool.crypto)
+    implementation(libs.bundles.network)
+
+    implementation(libs.bundles.compose)
     implementation(libs.coreKtx)
     implementation(libs.appcompat)
 

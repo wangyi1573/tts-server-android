@@ -5,19 +5,15 @@ package com.github.jing332.script_engine.core.type.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.FrameLayout
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
-import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppSpinner
+import com.github.jing332.compose.widgets.AppSpinner
 import kotlin.math.max
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -70,17 +66,16 @@ class JSpinner(context: Context, val hint: CharSequence) : FrameLayout(context) 
     @Composable
     fun Content() {
         val item = mItems.getOrElse(mSelectedPosition) { mItems.getOrNull(0) } ?: Item("null", Unit)
-        if (mItems.isEmpty()){
+        if (mItems.isEmpty()) {
             AppSpinner(
                 label = { Text(hint.toString()) },
                 value = item.value,
                 values = listOf(Unit),
-                entries = listOf(stringResource(id = R.string.empty_list)),
+                entries = listOf(stringResource(id = com.github.jing332.compose.R.string.empty_list)),
                 enabled = false,
                 onSelectedChange = { _, _ -> }
             )
-        }
-        else
+        } else
             AppSpinner(
                 label = { Text(hint.toString()) },
                 value = item.value,

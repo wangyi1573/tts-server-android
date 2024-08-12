@@ -51,7 +51,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.list.IntSlider
 import com.github.jing332.tts_server_android.compose.systts.list.edit.BasicInfoEditScreen
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.widgets.TtsTopAppBar
-import com.github.jing332.tts_server_android.compose.widgets.AppSelectionDialog
+import com.github.jing332.compose.widgets.AppSelectionDialog
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.entities.systts.SpeechRuleInfo
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
@@ -62,7 +62,7 @@ import com.github.jing332.tts_server_android.ui.FilePickerActivity
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import com.github.jing332.common.utils.ASFUriUtils.getPath
 import com.github.jing332.common.utils.FileUtils.audioList
-import com.github.jing332.tts_server_android.utils.clickableRipple
+import  com.github.jing332.compose.ComposeExtensions.clickableRipple
 import com.github.jing332.common.utils.toast
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted

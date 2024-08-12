@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
-import com.github.jing332.tts_server_android.compose.widgets.TextCheckBox
 import com.github.jing332.common.utils.toast
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.LoadingContent
+import com.github.jing332.compose.widgets.TextCheckBox
+import com.github.jing332.tts_server_android.R
 import kotlinx.coroutines.launch
 import kotlin.system.measureTimeMillis
 
@@ -83,7 +83,10 @@ fun ListSortSettingsDialog(
             Row(Modifier.fillMaxWidth()) {
                 TextCheckBox(
                     text = {
-                        Text(stringResource(id = R.string.descending), modifier = Modifier.padding(end = 8.dp))
+                        Text(
+                            stringResource(id = R.string.descending),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
                     }, checked = descending, onCheckedChange = { descending = it }
                 )
 

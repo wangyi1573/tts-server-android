@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.GroupItem
-import com.github.jing332.tts_server_android.compose.widgets.TextFieldDialog
+import com.github.jing332.compose.widgets.TextFieldDialog
 
 @Composable
 fun Group(

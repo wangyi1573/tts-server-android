@@ -55,7 +55,7 @@ import com.github.jing332.tts_server_android.compose.ShadowReorderableItem
 import com.github.jing332.tts_server_android.compose.navigate
 import com.github.jing332.tts_server_android.compose.systts.ConfigDeleteDialog
 import com.github.jing332.tts_server_android.compose.systts.plugin.PluginManagerActivity
-import com.github.jing332.tts_server_android.compose.widgets.LazyListIndexStateSaver
+import com.github.jing332.compose.widgets.LazyListIndexStateSaver
 import com.github.jing332.tts_server_android.data.appDb
 import com.github.jing332.tts_server_android.data.entities.SpeechRule
 import com.github.jing332.tts_server_android.utils.MyTools

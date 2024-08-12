@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextAlign.Companion
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.github.jing332.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.AppLauncherIcon
 import com.github.jing332.tts_server_android.BuildConfig
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
-import com.github.jing332.tts_server_android.compose.widgets.AppLauncherIcon
 
 @Composable
 fun AboutDialog(onDismissRequest: () -> Unit) {
@@ -36,7 +36,7 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                AppLauncherIcon(modifier = Modifier.size(64.dp))
+                AppLauncherIcon(modifier = Modifier.size(64.dp), R.mipmap.ic_app_launcher_round)
                 Text(
                     stringResource(id = R.string.app_name),
                     modifier = Modifier

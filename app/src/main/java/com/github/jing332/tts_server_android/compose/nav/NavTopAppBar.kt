@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.LocalDrawerState
-import com.github.jing332.tts_server_android.compose.widgets.AppTooltip
+import com.github.jing332.compose.widgets.AppTooltip
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

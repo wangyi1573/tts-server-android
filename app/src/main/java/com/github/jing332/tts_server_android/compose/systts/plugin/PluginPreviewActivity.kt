@@ -34,12 +34,12 @@ import com.github.jing332.tts_server_android.AppLocale
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.PluginTtsUI
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
-import com.github.jing332.tts_server_android.compose.widgets.AppDialog
+import com.github.jing332.compose.widgets.AppDialog
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 import com.github.jing332.tts_server_android.ui.view.ErrorDialogActivity
-import com.github.jing332.tts_server_android.utils.clickableRipple
+import  com.github.jing332.compose.ComposeExtensions.clickableRipple
 
 @Suppress("DEPRECATION")
 class PluginPreviewActivity : AppCompatActivity() {

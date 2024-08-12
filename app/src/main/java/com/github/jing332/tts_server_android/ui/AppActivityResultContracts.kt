@@ -8,7 +8,7 @@ import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContract
 import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.help.ByteArrayBinder
-import com.github.jing332.tts_server_android.utils.setBinder
+import com.github.jing332.common.utils.setBinder
 
 object AppActivityResultContracts {
     /**

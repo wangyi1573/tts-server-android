@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.LocalSaveCallBack
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.TtsUiFactory
 import com.github.jing332.tts_server_android.compose.systts.list.edit.ui.rememberSaveCallBacks
-import com.github.jing332.tts_server_android.compose.widgets.AppBottomSheet
+import com.github.jing332.compose.widgets.AppBottomSheet
 import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
 import com.github.jing332.tts_server_android.model.speech.tts.BgmTTS
 import kotlinx.coroutines.Dispatchers

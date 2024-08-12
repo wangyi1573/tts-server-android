@@ -30,13 +30,21 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    android {
+        packaging {
+            resources {
+                excludes += setOf("META-INF/INDEX.LIST", "META-INF/*.md")
+            }
+        }
+    }
 }
 
 dependencies {
-    implementation(libs.splitties.appctx)
-    implementation(libs.hutool.crypto)
-    implementation(libs.bundles.network)
-    implementation(libs.bundles.media3)
+    api(libs.splitties.appctx)
+    api(libs.hutool.crypto)
+    api(libs.bundles.network)
+    api(libs.bundles.media3)
 
     implementation(libs.coreKtx)
     implementation(libs.appcompat)

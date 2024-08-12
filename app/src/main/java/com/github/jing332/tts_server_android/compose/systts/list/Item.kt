@@ -2,7 +2,6 @@ package com.github.jing332.tts_server_android.compose.systts.list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -48,13 +46,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.github.jing332.common.utils.performLongPress
+import com.github.jing332.compose.widgets.LongClickIconButton
+import com.github.jing332.compose.widgets.htmlcompose.HtmlText
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.widgets.HtmlText
-import com.github.jing332.tts_server_android.compose.widgets.LongClickIconButton
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.utils.StringUtils.limitLength
-import com.github.jing332.tts_server_android.utils.clickableRipple
-import com.github.jing332.tts_server_android.utils.performLongPress
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorder
 

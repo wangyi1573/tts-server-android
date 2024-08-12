@@ -2,7 +2,6 @@ package com.github.jing332.script_engine.core.ext
 
 import androidx.annotation.Keep
 import com.drake.net.Net
-import com.drake.net.NetConfig
 import com.drake.net.exception.ConvertException
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -15,7 +14,7 @@ import java.io.File
 open class JsNet(private val engineId: String) {
     private val groupId by lazy { engineId + hashCode() }
 
-    internal fun cancel() {
+    fun cancelNetwork() {
         Net.cancelGroup(groupId)
     }
 

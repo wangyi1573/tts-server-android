@@ -49,8 +49,8 @@ import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.ShadowReorderableItem
 import com.github.jing332.tts_server_android.compose.navigate
 import com.github.jing332.tts_server_android.compose.systts.sizeToToggleableState
-import com.github.jing332.tts_server_android.compose.widgets.LazyListIndexStateSaver
-import com.github.jing332.tts_server_android.compose.widgets.TextFieldDialog
+import com.github.jing332.compose.widgets.LazyListIndexStateSaver
+import com.github.jing332.compose.widgets.TextFieldDialog
 import com.github.jing332.tts_server_android.data.appDb
 import com.github.jing332.tts_server_android.data.entities.replace.GroupWithReplaceRule
 import com.github.jing332.tts_server_android.data.entities.replace.ReplaceRule

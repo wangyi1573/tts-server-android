@@ -24,6 +24,7 @@ reorderable = "0.9.6"
 constraintlayoutCompose = "1.0.1"
 navigationCompose = "2.7.7"
 dataSaver = "v1.1.5"
+sheet = "0.5.4"
 
 okio = "3.3.0"
 okhttp = "4.11.0"
@@ -69,7 +70,15 @@ markwon-linkify = { module = "io.noties.markwon:linkify", version.ref = "markwon
 
 android-svg = { module = "com.caverock:androidsvg", version.ref = "androidsgv" }
 
-composeBom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+
+compose-material3-core = { module = "androidx.compose.material3:material3" }
+compose-material3-winsize = { module = "androidx.compose.material3:material3-window-size-class" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecyle" }
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecyle" }
 lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecyle" }
@@ -80,6 +89,7 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 
 compose-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "reorderable" }
 compose-datasaver = { module = "com.github.FunnySaltyFish.ComposeDataSaver:data-saver", version.ref = "dataSaver" }
+compose-sheet = { module = "io.github.dokar3:sheets-m3", version.ref = "sheet" }
 
 about = { module = "com.mikepenz:aboutlibraries-core", version.ref = "about" }
 about-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "about" }
@@ -109,9 +119,11 @@ room = ["roomRuntime", "roomKtx"]
 accompanist = ["accompanist-systemuicontroller", "accompanist-nativation-animation", "accompanist-webview", "accompanist-permissions"]
 lifecycle = ["lifecycle-runtime-compose", "lifecycle-viewmodel-ktx", "lifecycle-livedata-ktx"]
 compose = [
+    "compose-foundation", "compose-ui",
     "activity-compose", "constraintlayout-compose", "navigation-compose",
-    "compose-reorderable", "compose-datasaver"
+    "compose-reorderable", "compose-datasaver", "compose-sheet"
 ]
+compose-material3 = ["compose-material-icons-core", "compose-material-icons-extended", "compose-material3-winsize", "compose-material3-core"]
 about = ["about", "about-compose"]
 network = ["okio", "okhttp", "net"]
 ui = ["material", "recyclerview"]

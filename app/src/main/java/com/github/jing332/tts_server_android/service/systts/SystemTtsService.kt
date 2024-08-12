@@ -36,13 +36,12 @@ import com.github.jing332.tts_server_android.service.systts.help.exception.Speec
 import com.github.jing332.tts_server_android.service.systts.help.exception.TextReplacerException
 import com.github.jing332.tts_server_android.service.systts.help.exception.TtsManagerException
 import com.github.jing332.tts_server_android.constant.AppLog
-import com.github.jing332.tts_server_android.utils.GcManager
 import com.github.jing332.tts_server_android.utils.StringUtils.limitLength
 import com.github.jing332.common.utils.longToast
-import com.github.jing332.tts_server_android.utils.registerGlobalReceiver
+import com.github.jing332.common.utils.registerGlobalReceiver
 import com.github.jing332.common.utils.rootCause
 import com.github.jing332.common.utils.runOnUI
-import com.github.jing332.tts_server_android.utils.startForegroundCompat
+import com.github.jing332.common.utils.startForegroundCompat
 import com.github.jing332.tts_server_android.utils.toHtmlBold
 import com.github.jing332.tts_server_android.utils.toHtmlItalic
 import com.github.jing332.tts_server_android.utils.toHtmlSmall
@@ -284,7 +283,7 @@ class SystemTtsService : TextToSpeechService(), TextToSpeechManager.Listener {
         if (mWakeLock != null && mWakeLock?.isHeld == false) {
             mWakeLock?.acquire(60 * 20 * 1000)
         }
-        GcManager.doGC()
+//        GcManager.doGC()
     }
 
     private var mNotificationBuilder: Notification.Builder? = null
