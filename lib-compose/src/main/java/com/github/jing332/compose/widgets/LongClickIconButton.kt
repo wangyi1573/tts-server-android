@@ -40,7 +40,6 @@ fun LongClickIconButton(
     content: @Composable () -> Unit
 ) {
     val stateLayerSize = 40.0.dp
-    val context = LocalContext.current
     val view = LocalView.current
     Box(
         modifier = modifier

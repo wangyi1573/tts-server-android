@@ -47,7 +47,7 @@ fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: 
     )
 
     CircularProgressIndicator(
-        progress = 1f,
+        progress = { 1f },
         modifier = Modifier
             .size(progressIndicatorSize)
             .rotate(angle)
@@ -62,8 +62,8 @@ fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: 
                 ),
                 shape = CircleShape
             ),
+        color = Color.Transparent,
         strokeWidth = 1.dp,
-        color = Color.Transparent
     )
 }
 
