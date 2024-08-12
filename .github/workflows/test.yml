@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.20.3
           cache-dependency-path: ${{ github.workspace }}/tts-server-lib
@@ -26,7 +26,7 @@ jobs:
           chmod +x *.sh
           ./build_gojni.sh
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v4
         with:
           name: tts-server-lib
           path: lib-gojni-aar/*.aar
@@ -90,13 +90,13 @@ jobs:
           #          echo "apk_path=${{ env.outputs_dir }}/apk/${{ env.product }}/release/${{ env.product }}-release.apk" >> $GITHUB_ENV    
           
           #            - name: Upload Mappings to Artifact
-          #              uses: actions/upload-artifact@v3
+          #              uses: actions/upload-artifact@v4
           #              with:
           #                name: mappings_${{ env.product }}_${{ env.ver_name }}
           #                path: ${{ env.outputs_dir }}/mapping/*/*.txt
 
       - name: Upload APK To Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "TTS-Server_${{ env.product }}_${{ env.ver_name }}"
           path: ${{env.outputs_dir}}/apk/${{ env.product }}/release/*${{ env.ver_name }}.apk

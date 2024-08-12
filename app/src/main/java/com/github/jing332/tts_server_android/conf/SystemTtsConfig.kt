@@ -177,4 +177,10 @@ object SystemTtsConfig {
         key = "isExoDecoderEnabled",
         initialValue = true
     )
+
+    val isSilenceAudio = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isSilenceAudio",
+        initialValue = false
+    )
 }

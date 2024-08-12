@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.19.1
           cache-dependency-path: ${{ github.workspace }}/tts-server-lib
@@ -20,7 +20,7 @@ jobs:
           chmod +x *.sh
           ./build_gojni.sh
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v4
         with:
           name: tts-server-lib
           path: lib-gojni-aar/*.aar
@@ -63,7 +63,7 @@ jobs:
           ./gradlew assembleAppDebug --build-cache --parallel --daemon --warning-mode all
 
       - name: Upload APK To Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "TTS-Server_debug"
           path: ${{env.outputs_dir}}/apk/app/debug/*debug.apk
