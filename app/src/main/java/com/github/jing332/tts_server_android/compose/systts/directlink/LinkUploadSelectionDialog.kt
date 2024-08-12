@@ -18,7 +18,7 @@ import com.github.jing332.tts_server_android.model.rhino.direct_link_upload.Dire
 import com.github.jing332.tts_server_android.model.rhino.direct_link_upload.DirectUploadFunction
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
-import com.github.jing332.tts_server_android.utils.longToast
+import com.github.jing332.common.utils.longToast
 import kotlinx.coroutines.launch
 
 @Composable

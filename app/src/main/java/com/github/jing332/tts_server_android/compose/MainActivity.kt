@@ -79,6 +79,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.jing332.common.DateFormatConst
 import com.github.jing332.tts_server_android.BuildConfig
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.ShortCuts
@@ -99,9 +100,9 @@ import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity
 import com.github.jing332.tts_server_android.utils.MyTools.killBattery
 import com.github.jing332.tts_server_android.utils.clone
-import com.github.jing332.tts_server_android.utils.longToast
+import com.github.jing332.common.utils.longToast
 import com.github.jing332.tts_server_android.utils.performLongPress
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -379,7 +380,7 @@ fun NavDrawerContent(
             }
             AnimatedVisibility(visible = isBuildTimeExpanded) {
                 Text(
-                    text = AppConst.dateFormatSec.format(BuildConfig.BUILD_TIME * 1000),
+                    text = DateFormatConst.dateFormatSec.format(BuildConfig.BUILD_TIME * 1000),
                     modifier = Modifier.padding(4.dp)
                 )
             }

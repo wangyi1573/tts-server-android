@@ -3,7 +3,7 @@ package com.github.jing332.tts_server_android.model.speech.tts
 import android.util.Log
 import cn.hutool.core.lang.UUID
 import com.drake.net.utils.withIO
-import com.github.jing332.tts_server_android.model.rhino.core.type.ws.internal.WebSocketException
+import com.github.jing332.script_engine.core.type.ws.internal.WebSocketException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
@@ -69,7 +69,9 @@ class EdgeTtsWS : WebSocketListener() {
                 Status.Opened -> return@withIO true
                 is Status.Failure ->
                     (connectStatus as Status.Failure).apply {
-                        throw WebSocketException(response).initCause(t)
+                        throw com.github.jing332.script_engine.core.type.ws.internal.WebSocketException(
+                            response
+                        ).initCause(t)
                     }
 
                 else -> {}
@@ -105,7 +107,9 @@ class EdgeTtsWS : WebSocketListener() {
             when (connectStatus) {
                 is Status.Failure ->
                     (connectStatus as Status.Failure).apply {
-                        throw WebSocketException(response).initCause(t)
+                        throw com.github.jing332.script_engine.core.type.ws.internal.WebSocketException(
+                            response
+                        ).initCause(t)
                     }
 
                 is Status.Closing ->

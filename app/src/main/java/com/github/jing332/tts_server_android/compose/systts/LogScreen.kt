@@ -35,7 +35,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.AppLog
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.toAnnotatedString
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

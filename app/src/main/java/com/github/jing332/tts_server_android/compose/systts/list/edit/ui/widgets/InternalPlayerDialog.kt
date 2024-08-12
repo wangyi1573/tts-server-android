@@ -16,7 +16,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.list.BasicAudioParamsDialog
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.model.speech.tts.PlayerParams
-import com.github.jing332.tts_server_android.utils.longToast
+import com.github.jing332.common.utils.longToast
 
 @Composable
 fun InternalPlayerDialog(

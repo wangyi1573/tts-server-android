@@ -4,8 +4,8 @@ import android.content.Context
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.data.entities.plugin.Plugin
-import com.github.jing332.tts_server_android.model.rhino.core.BaseScriptEngine
-import com.github.jing332.tts_server_android.model.rhino.core.Logger
+import com.github.jing332.script_engine.core.BaseScriptEngine
+import com.github.jing332.script_engine.core.Logger
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 import com.script.javascript.RhinoScriptEngine
 import org.mozilla.javascript.NativeObject
@@ -16,8 +16,8 @@ open class TtsPluginEngine(
     val pluginTTS: PluginTTS,
     private val context: Context,
     override val rhino: RhinoScriptEngine = RhinoScriptEngine(),
-    override val logger: Logger = Logger(),
-) : BaseScriptEngine(
+    override val logger: com.github.jing332.script_engine.core.Logger = com.github.jing332.script_engine.core.Logger(),
+) : com.github.jing332.script_engine.core.BaseScriptEngine(
     rhino = rhino, logger = logger,
     code = pluginTTS.requirePlugin.code,
     ttsrvObject = EngineContext(

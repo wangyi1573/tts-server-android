@@ -20,7 +20,7 @@ import com.github.jing332.tts_server_android.ui.systts.ImportConfigFactory
 import com.github.jing332.tts_server_android.ui.systts.ImportConfigFactory.gotoEditorFromJS
 import com.github.jing332.tts_server_android.ui.systts.ImportType
 import com.github.jing332.common.utils.FileUtils.readAllText
-import com.github.jing332.tts_server_android.utils.longToast
+import com.github.jing332.common.utils.longToast
 
 
 class ImportConfigActivity : AppCompatActivity() {

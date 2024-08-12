@@ -41,7 +41,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.clickableRipple
 import com.github.jing332.tts_server_android.utils.performLongPress
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 

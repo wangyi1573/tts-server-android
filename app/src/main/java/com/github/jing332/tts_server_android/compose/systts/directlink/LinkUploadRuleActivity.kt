@@ -19,7 +19,7 @@ import com.github.jing332.tts_server_android.compose.codeeditor.CodeEditorScreen
 import com.github.jing332.tts_server_android.compose.codeeditor.LoggerBottomSheet
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.conf.DirectUploadConfig
-import com.github.jing332.tts_server_android.model.rhino.core.Logger
+import com.github.jing332.script_engine.core.Logger
 import com.github.jing332.tts_server_android.model.rhino.direct_link_upload.DirectUploadEngine
 import com.github.jing332.tts_server_android.model.rhino.direct_link_upload.DirectUploadFunction
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
@@ -42,7 +42,7 @@ class LinkUploadRuleActivity : AppCompatActivity() {
     @Composable
     private fun LinkUploadRuleScreen() {
         var editor by remember { mutableStateOf<CodeEditor?>(null) }
-        val logger by remember { mutableStateOf(Logger()) }
+        val logger by remember { mutableStateOf(com.github.jing332.script_engine.core.Logger()) }
         var targets by remember { mutableStateOf<List<DirectUploadFunction>?>(null) }
         val scope = rememberCoroutineScope()
 

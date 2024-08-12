@@ -5,16 +5,16 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.data.entities.SpeechRule
 import com.github.jing332.tts_server_android.data.entities.TagsDataMap
 import com.github.jing332.tts_server_android.data.entities.systts.SpeechRuleInfo
-import com.github.jing332.tts_server_android.model.rhino.core.BaseScriptEngine
-import com.github.jing332.tts_server_android.model.rhino.core.Logger
+import com.github.jing332.script_engine.core.BaseScriptEngine
+import com.github.jing332.script_engine.core.Logger
 
 class SpeechRuleEngine(
     val context: Context,
     private val rule: SpeechRule,
     override var code: String = rule.code,
-    override val logger: Logger = Logger.global
+    override val logger: com.github.jing332.script_engine.core.Logger = com.github.jing332.script_engine.core.Logger.global
 ) :
-    BaseScriptEngine(ttsrvObject = ScriptEngineContext(context = context, "ReadRule")) {
+    com.github.jing332.script_engine.core.BaseScriptEngine(ttsrvObject = ScriptEngineContext(context = context, "ReadRule")) {
     companion object {
         const val OBJ_JS = "SpeechRuleJS"
 

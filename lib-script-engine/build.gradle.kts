@@ -33,10 +33,14 @@ android {
 }
 
 dependencies {
+    implementation(fileTree("include" to listOf("*.jar"), "dir" to "libs"))
+
     api(project(":lib-common"))
+    implementation(libs.hutool.crypto)
+
     implementation(libs.coreKtx)
     implementation(libs.appcompat)
-    
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

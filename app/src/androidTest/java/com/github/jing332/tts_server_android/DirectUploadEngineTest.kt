@@ -1,7 +1,7 @@
 package com.github.jing332.tts_server_android
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.jing332.tts_server_android.model.rhino.core.ext.JsExtensions
+import com.github.jing332.script_engine.core.ext.JsExtensions
 import com.github.jing332.tts_server_android.model.rhino.direct_link_upload.DirectUploadEngine
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +11,7 @@ class DirectUploadEngineTest {
 
     @Test
     fun catBox() {
-        val ext = JsExtensions(app, "")
+        val ext = com.github.jing332.script_engine.core.ext.JsExtensions(app, "")
 
         val form = mutableMapOf<String, Any>()
 

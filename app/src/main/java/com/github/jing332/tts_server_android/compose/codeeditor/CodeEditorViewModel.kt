@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.drake.net.utils.withMain
 import com.github.jing332.lib_gojni.CodeSyncServer
-import com.github.jing332.tts_server_android.utils.runOnUI
+import com.github.jing332.common.utils.runOnUI
 import kotlinx.coroutines.runBlocking
 
 class CodeEditorViewModel : ViewModel() {

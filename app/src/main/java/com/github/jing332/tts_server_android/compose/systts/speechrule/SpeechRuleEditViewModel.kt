@@ -9,7 +9,7 @@ import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.appDb
 import com.github.jing332.tts_server_android.data.entities.SpeechRule
 import com.github.jing332.tts_server_android.model.rhino.ExceptionExt.lineMessage
-import com.github.jing332.tts_server_android.model.rhino.core.Logger
+import com.github.jing332.script_engine.core.Logger
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
 import com.script.ScriptException
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ class SpeechRuleEditViewModel : ViewModel() {
     private lateinit var mSpeechRule: SpeechRule
     private lateinit var mRuleEngine: SpeechRuleEngine
 
-    val logger: Logger
+    val logger: com.github.jing332.script_engine.core.Logger
         get() = mRuleEngine.logger
 
     val speechRule: SpeechRule
@@ -40,7 +40,9 @@ class SpeechRuleEditViewModel : ViewModel() {
         mSpeechRule = speechRule
 
         if (mSpeechRule.code.isBlank()) mSpeechRule.code = defaultCode
-        mRuleEngine = SpeechRuleEngine(app, mSpeechRule, mSpeechRule.code, Logger())
+        mRuleEngine = SpeechRuleEngine(app, mSpeechRule, mSpeechRule.code,
+            com.github.jing332.script_engine.core.Logger()
+        )
 
         _codeLiveData.value = mSpeechRule.code
     }

@@ -169,6 +169,8 @@ android {
 dependencies {
     api(project(":lib-common"))
     implementation(project(":lib-gojni"))
+    implementation(project(":lib-script-engine"))
+
     coreLibraryDesugaring(libs.desugar)
 
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')

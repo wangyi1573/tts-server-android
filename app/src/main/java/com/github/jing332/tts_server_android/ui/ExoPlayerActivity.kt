@@ -35,7 +35,7 @@ import androidx.media3.ui.PlayerView
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.tts_server_android.utils.ASFUriUtils.getPath
+import com.github.jing332.common.utils.ASFUriUtils.getPath
 
 @kotlin.OptIn(ExperimentalMaterial3Api::class)
 class ExoPlayerActivity : AppCompatActivity(), Player.Listener {

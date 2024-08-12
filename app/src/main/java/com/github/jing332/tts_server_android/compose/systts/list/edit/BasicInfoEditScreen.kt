@@ -60,8 +60,8 @@ import com.github.jing332.tts_server_android.model.speech.tts.ITextToSpeechEngin
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.clone
-import com.github.jing332.tts_server_android.utils.longToast
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.longToast
+import com.github.jing332.common.utils.toast
 import kotlinx.serialization.encodeToString
 
 @Composable

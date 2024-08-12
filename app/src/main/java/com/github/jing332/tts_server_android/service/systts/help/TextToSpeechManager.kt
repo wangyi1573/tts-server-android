@@ -11,11 +11,7 @@ import com.github.jing332.tts_server_android.constant.AppPattern
 import com.github.jing332.tts_server_android.constant.ReplaceExecution
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.common.audio.AudioDecoder
 import com.github.jing332.common.audio.AudioDecoder.Companion.readPcmChunk
-import com.github.jing332.common.audio.ExoAudioPlayer
-import com.github.jing332.common.audio.Sonic
-import com.github.jing332.common.audio.exo.ExoAudioDecoder
 import com.github.jing332.tts_server_android.model.speech.ITextToSpeechSynthesizer
 import com.github.jing332.tts_server_android.model.speech.TtsTextSegment
 import com.github.jing332.tts_server_android.model.speech.tts.BaseAudioFormat
@@ -29,8 +25,8 @@ import com.github.jing332.tts_server_android.service.systts.help.exception.Reque
 import com.github.jing332.tts_server_android.service.systts.help.exception.SpeechRuleException
 import com.github.jing332.tts_server_android.service.systts.help.exception.TtsManagerException
 import com.github.jing332.tts_server_android.utils.StringUtils
-import com.github.jing332.tts_server_android.utils.longToast
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.longToast
+import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay

@@ -28,7 +28,7 @@ import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.common.utils.FileUtils.readAllText
 import com.github.jing332.tts_server_android.utils.dp
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.LinkResolverDef

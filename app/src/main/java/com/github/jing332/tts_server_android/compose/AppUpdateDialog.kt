@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.jing332.common.DateFormatConst
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.widgets.AppDialog
 import com.github.jing332.tts_server_android.compose.widgets.Markdown
@@ -58,7 +59,7 @@ fun AppUpdateActionDialog(onDismissRequest: () -> Unit, result: AppUpdateChecker
                 style = MaterialTheme.typography.titleLarge,
             )
             Text(
-                text = AppConst.dateFormatSec.format(result.time * 1000),
+                text = DateFormatConst.dateFormatSec.format(result.time * 1000),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )

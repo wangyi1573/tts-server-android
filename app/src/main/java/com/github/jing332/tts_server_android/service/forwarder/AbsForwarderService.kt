@@ -17,13 +17,13 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.KeyConst
 import com.github.jing332.tts_server_android.constant.AppLog
-import com.github.jing332.tts_server_android.constant.LogLevel
+import com.github.jing332.common.LogLevel
 import com.github.jing332.lib_gojni.NativeUtils
 import com.github.jing332.tts_server_android.ui.ImportConfigActivity
 import com.github.jing332.tts_server_android.utils.ClipboardUtils
 import com.github.jing332.tts_server_android.utils.registerGlobalReceiver
 import com.github.jing332.tts_server_android.utils.startForegroundCompat
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import splitties.systemservices.powerManager
 
 @Suppress("DEPRECATION")

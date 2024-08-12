@@ -17,7 +17,7 @@ import com.github.jing332.tts_server_android.compose.widgets.DenseOutlinedField
 import com.github.jing332.tts_server_android.compose.widgets.LocalBroadcastReceiver
 import com.github.jing332.tts_server_android.compose.widgets.SwitchFloatingButton
 import com.github.jing332.tts_server_android.constant.KeyConst
-import com.github.jing332.tts_server_android.constant.LogLevel
+import com.github.jing332.common.LogLevel
 import com.github.jing332.tts_server_android.constant.AppLog
 
 @Suppress("DEPRECATION")

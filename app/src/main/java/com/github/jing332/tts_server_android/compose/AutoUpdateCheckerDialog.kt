@@ -11,7 +11,7 @@ import com.drake.net.utils.withIO
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.model.updater.AppUpdateChecker
 import com.github.jing332.tts_server_android.model.updater.UpdateResult
-import com.github.jing332.tts_server_android.utils.longToast
+import com.github.jing332.common.utils.longToast
 import kotlinx.coroutines.CancellationException
 
 @Composable

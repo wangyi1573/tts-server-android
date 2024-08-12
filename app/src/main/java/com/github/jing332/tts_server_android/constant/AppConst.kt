@@ -6,10 +6,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.github.jing332.tts_server_android.App
 import com.github.jing332.tts_server_android.BuildConfig
 import com.github.jing332.tts_server_android.app
-import com.script.javascript.RhinoScriptEngine
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 @SuppressLint("SimpleDateFormat")
@@ -39,31 +37,11 @@ object AppConst {
     val isCnLocale: Boolean
         get() = App.context.resources.configuration.locale.language.endsWith("zh")
 
-
-    // JS引擎
-    val SCRIPT_ENGINE: RhinoScriptEngine by lazy { RhinoScriptEngine() }
-
     val locale: Locale
         get() = App.context.resources.configuration.locale
 
     val localeCode: String
         get() = locale.run { "$language-$country" }
-
-    val timeFormat: SimpleDateFormat by lazy {
-        SimpleDateFormat("HH:mm")
-    }
-
-    val dateFormat: SimpleDateFormat by lazy {
-        SimpleDateFormat("yyyy/MM/dd HH:mm")
-    }
-
-    val dateFormatSec: SimpleDateFormat by lazy {
-        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    }
-
-    val fileNameFormat: SimpleDateFormat by lazy {
-        SimpleDateFormat("yy-MM-dd-HH-mm-ss")
-    }
 
     val appInfo: AppInfo by lazy {
         val appInfo = AppInfo()

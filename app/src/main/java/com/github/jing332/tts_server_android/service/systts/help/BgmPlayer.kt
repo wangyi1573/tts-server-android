@@ -9,7 +9,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.common.utils.FileUtils
 import com.github.jing332.common.utils.FileUtils.mimeType
-import com.github.jing332.tts_server_android.utils.runOnUI
+import com.github.jing332.common.utils.runOnUI
 import java.io.File
 
 

@@ -28,7 +28,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.widgets.AppDialog
 import com.github.jing332.tts_server_android.compose.widgets.LoadingContent
 import com.github.jing332.tts_server_android.compose.widgets.TextCheckBox
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 import kotlinx.coroutines.launch
 import kotlin.system.measureTimeMillis
 

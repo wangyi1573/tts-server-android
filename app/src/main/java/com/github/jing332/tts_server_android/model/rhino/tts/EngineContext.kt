@@ -2,7 +2,7 @@ package com.github.jing332.tts_server_android.model.rhino.tts
 
 import android.content.Context
 import androidx.annotation.Keep
-import com.github.jing332.tts_server_android.model.rhino.core.BaseScriptEngineContext
+import com.github.jing332.script_engine.core.BaseScriptEngineContext
 import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 
 /**
@@ -15,5 +15,5 @@ data class EngineContext(
     override val context: Context,
     override val engineId: String
 ) :
-    BaseScriptEngineContext(context, engineId) {
+    com.github.jing332.script_engine.core.BaseScriptEngineContext(context, engineId) {
 }

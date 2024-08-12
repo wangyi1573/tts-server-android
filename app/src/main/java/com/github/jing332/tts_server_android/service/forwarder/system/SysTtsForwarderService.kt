@@ -8,7 +8,7 @@ import com.github.jing332.tts_server_android.App
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.SystemTtsForwarderConfig
 import com.github.jing332.tts_server_android.constant.AppConst
-import com.github.jing332.tts_server_android.constant.LogLevel
+import com.github.jing332.common.LogLevel
 import com.github.jing332.tts_server_android.help.LocalTtsEngineHelper
 import com.github.jing332.tts_server_android.model.speech.tts.LocalTTS
 import com.github.jing332.tts_server_android.service.forwarder.AbsForwarderService

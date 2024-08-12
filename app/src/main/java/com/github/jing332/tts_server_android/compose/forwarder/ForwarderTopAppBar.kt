@@ -28,7 +28,7 @@ import androidx.core.net.toUri
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.nav.NavTopAppBar
 import com.github.jing332.tts_server_android.compose.widgets.CheckedMenuItem
-import com.github.jing332.tts_server_android.utils.toast
+import com.github.jing332.common.utils.toast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

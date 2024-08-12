@@ -11,7 +11,9 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
+import com.github.jing332.common.utils.longToast
+import com.github.jing332.common.utils.runOnUI
+import com.github.jing332.common.utils.toast
 import com.github.jing332.tts_server_android.BuildConfig
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.bean.GithubReleaseApiBean
