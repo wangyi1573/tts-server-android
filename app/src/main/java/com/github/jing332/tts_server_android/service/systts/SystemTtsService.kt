@@ -220,7 +220,8 @@ class SystemTtsService : TextToSpeechService(), TextToSpeechManager.Listener {
 
     override fun onSynthesizeText(request: SynthesisRequest, callback: SynthesisCallback) {
 
-        if (request.charSequenceText?.isBlank() == true) {
+        if (request.charSequenceText == null ||
+            request.charSequenceText.isBlank()) {
             callback.done()
             return
         }
