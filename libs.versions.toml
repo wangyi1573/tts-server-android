@@ -1,7 +1,7 @@
 [versions]
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "21"
-targetSdk = "34"
+targetSdk = "35"
 
 coreKtx = "1.13.1"
 appcompat = "1.7.0"
@@ -13,9 +13,10 @@ kotlin = "2.1.10"
 ksp = "2.1.10-1.0.29"
 about = "10.9.2"
 
-coroutines = "1.9.0"
+coroutines = "1.10.1"
 serializationJson = "1.7.3"
 material = "1.12.0"
+material3 = "1.4.0-alpha08"
 
 immersionbar = "3.2.2"
 accompanist = "0.33.0-alpha"
@@ -32,7 +33,7 @@ okio = "3.6.0"
 okhttp = "4.12.0"
 net = "3.7.0"
 ktor-server = "3.0.3"
-coil = "3.0.4"
+coil = "3.1.0"
 apache-commons-text = "1.13.0"
 
 #noinspection GradleDependency
@@ -46,7 +47,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 #noinspection GradleDependency
 hutool = "5.8.19"
-media = "1.4.0"
+media = "1.5.1"
 caffeine = "3.1.8"
 desugar = "2.1.4"
 splitties = "3.0.0"
@@ -94,7 +95,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-android = { module = "androidx.compose.ui:ui-android" }
 
-compose-material3-core = { module = "androidx.compose.material3:material3" }
+compose-material3-core = { module = "androidx.compose.material3:material3", version.ref = "material3"  }
 compose-material3-winsize = { module = "androidx.compose.material3:material3-window-size-class" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
