@@ -7,13 +7,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,18 +32,31 @@ fun DropdownTextField(
     value: Any,
     values: List<Any>,
     entries: List<String>,
+    icons: List<Any?> = emptyList(),
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueSame: (current: Any, new: Any) -> Boolean = { current, new -> current == new },
     onSelectedChange: (value: Any, entry: String) -> Unit,
 ) {
-    var selectedText = entries.getOrNull(max(0, values.indexOf(value))) ?: ""
+    val index = remember(value, values) { values.indexOf(value) }
+    var selectedText = remember(entries, index) { entries.getOrNull(max(0, index)) ?: "" }
+    val icon = remember(icons, index) { icons.getOrNull(index) }
     var expanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(values, entries) {
         values.getOrNull(entries.indexOf(selectedText))?.let {
             onSelectedChange.invoke(it, selectedText)
         }
+    }
+
+    // Non-null causes placeholder issues
+    @Composable
+    fun leading(): @Composable (() -> Unit)? {
+        return if (leadingIcon == null && icon != null) {
+            {
+                AsyncCircleImage(icon)
+            }
+        } else null
     }
 
     CompositionLocalProvider(
@@ -58,7 +71,7 @@ fun DropdownTextField(
         ) {
             OutlinedTextField(
                 modifier = Modifier
-                    .menuAnchor()
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                     .fillMaxWidth(),
                 leadingIcon = leadingIcon,
                 readOnly = true,
@@ -70,6 +83,7 @@ fun DropdownTextField(
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
             )
+
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
@@ -83,6 +97,7 @@ fun DropdownTextField(
                                 fontWeight = if (checked) FontWeight.Bold else FontWeight.Normal
                             )
                         },
+                        leadingIcon = leading(),
                         onClick = {
                             expanded = false
                             selectedText = text

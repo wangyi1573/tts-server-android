@@ -1,6 +1,5 @@
 package com.github.jing332.tts_server_android.compose.systts.list
 
-import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.Audiotrack
@@ -41,36 +39,41 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.drake.net.utils.withIO
+import com.github.jing332.common.utils.longToast
+import com.github.jing332.common.utils.toast
+import com.github.jing332.compose.widgets.LazyListIndexStateSaver
+import com.github.jing332.compose.widgets.ShadowedDraggableItem
+import com.github.jing332.compose.widgets.TextFieldDialog
+import com.github.jing332.database.dbm
+import com.github.jing332.database.entities.AbstractListGroup
+import com.github.jing332.database.entities.systts.BgmConfiguration
+import com.github.jing332.database.entities.systts.GroupWithSystemTts
+import com.github.jing332.database.entities.systts.SystemTtsGroup
+import com.github.jing332.database.entities.systts.SystemTtsV2
+import com.github.jing332.database.entities.systts.TtsConfigurationDTO
+import com.github.jing332.database.entities.systts.source.LocalTtsSource
+import com.github.jing332.database.entities.systts.source.PluginTtsSource
+import com.github.jing332.tts_server_android.AppLocale
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.LocalDrawerState
 import com.github.jing332.tts_server_android.compose.LocalNavController
-import com.github.jing332.tts_server_android.compose.ShadowReorderableItem
+import com.github.jing332.tts_server_android.compose.SharedViewModel
 import com.github.jing332.tts_server_android.compose.nav.NavRoutes
 import com.github.jing332.tts_server_android.compose.nav.NavTopAppBar
-import com.github.jing332.tts_server_android.compose.navigate
 import com.github.jing332.tts_server_android.compose.systts.AuditionDialog
 import com.github.jing332.tts_server_android.compose.systts.ConfigDeleteDialog
 import com.github.jing332.tts_server_android.compose.systts.ConfigExportBottomSheet
-import com.github.jing332.tts_server_android.compose.systts.list.edit.QuickEditBottomSheet
-import com.github.jing332.tts_server_android.compose.systts.list.edit.TagDataClearConfirmDialog
+import com.github.jing332.tts_server_android.compose.systts.list.ui.ItemDescriptorFactory
+import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.QuickEditBottomSheet
+import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.TagDataClearConfirmDialog
+import com.github.jing332.tts_server_android.compose.systts.plugin.PluginSelectionDialog
 import com.github.jing332.tts_server_android.compose.systts.sizeToToggleableState
-import com.github.jing332.compose.widgets.LazyListIndexStateSaver
-import com.github.jing332.compose.widgets.TextFieldDialog
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.SpeechTarget
-import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.tts_server_android.data.entities.AbstractListGroup
-import com.github.jing332.tts_server_android.data.entities.systts.GroupWithSystemTts
-import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
-import com.github.jing332.tts_server_android.data.entities.systts.SystemTtsGroup
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
-import com.github.jing332.tts_server_android.model.speech.tts.BgmTTS
-import com.github.jing332.tts_server_android.model.speech.tts.LocalTTS
-import com.github.jing332.tts_server_android.model.speech.tts.MsTTS
-import com.github.jing332.tts_server_android.model.speech.tts.PluginTTS
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
+import com.github.jing332.tts_server_android.toCode
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
-import com.github.jing332.common.utils.longToast
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -80,22 +83,25 @@ import org.burnoutcrew.reorderable.reorderable
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
+internal fun ListManagerScreen(
+    sharedVM: SharedViewModel,
+    vm: ListManagerViewModel = viewModel(),
+) {
     val navController = LocalNavController.current
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val drawerState = LocalDrawerState.current
 
-    var showSortDialog by remember { mutableStateOf<List<SystemTts>?>(null) }
+    var showSortDialog by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
     if (showSortDialog != null) SortDialog(
         onDismissRequest = { showSortDialog = null },
         list = showSortDialog!!
     )
 
-    var showQuickEdit by remember { mutableStateOf<SystemTts?>(null) }
+    var showQuickEdit by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (showQuickEdit != null) {
         QuickEditBottomSheet(onDismissRequest = {
-            appDb.systemTtsDao.insertTts(showQuickEdit!!)
+            dbm.systemTtsV2.insert(showQuickEdit!!)
             if (showQuickEdit?.isEnabled == true) SystemTtsService.notifyUpdateConfig()
             showQuickEdit = null
         }, systts = showQuickEdit!!, onSysttsChange = {
@@ -103,85 +109,86 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
         })
     }
 
-    fun navigateToEdit(systts: SystemTts) {
-        navController.navigate(NavRoutes.TtsEdit.id, Bundle().apply {
-            putParcelable(NavRoutes.TtsEdit.DATA, systts)
-        })
+    fun navigateToEdit(systts: SystemTtsV2) {
+        sharedVM.put(NavRoutes.TtsEdit.DATA, systts)
+        navController.navigate(NavRoutes.TtsEdit.id)
     }
 
     // 长按Item拖拽提示
     var hasShownTip by rememberSaveable { mutableStateOf(false) }
 
-    var showTagClearDialog by remember { mutableStateOf<SystemTts?>(null) }
+    var showTagClearDialog by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (showTagClearDialog != null) {
         val systts = showTagClearDialog!!
+        val config = systts.config as TtsConfigurationDTO
         TagDataClearConfirmDialog(
-            tagData = systts.speechRule.tagData.toString(),
+            tagData = config.speechRule.tagData.toString(),
             onDismissRequest = { showTagClearDialog = null },
             onConfirm = {
-                systts.speechRule.target = SpeechTarget.ALL
-                systts.speechRule.resetTag()
-                appDb.systemTtsDao.updateTts(systts)
+                config.speechRule.target = SpeechTarget.ALL
+                config.speechRule.resetTag()
+                dbm.systemTtsV2.update(systts)
                 if (systts.isEnabled) SystemTtsService.notifyUpdateConfig()
                 showTagClearDialog = null
             }
         )
     }
 
-    fun switchSpeechTarget(systts: SystemTts) {
+    fun switchSpeechTarget(systts: SystemTtsV2) {
         if (!hasShownTip) {
             hasShownTip = true
             context.longToast(R.string.systts_drag_tip_msg)
         }
 
         val model = systts.copy()
-        if (model.speechRule.target == SpeechTarget.BGM) return
+        val config = model.config as TtsConfigurationDTO
+        if (config.speechRule.target == SpeechTarget.BGM) return
 
-        if (model.speechRule.target == SpeechTarget.CUSTOM_TAG) appDb.speechRuleDao.getByRuleId(
-            model.speechRule.tagRuleId
+        if (config.speechRule.target == SpeechTarget.CUSTOM_TAG) dbm.speechRuleDao.getByRuleId(
+            config.speechRule.tagRuleId
         )?.let { speechRule ->
             val keys = speechRule.tags.keys.toList()
-            val idx = keys.indexOf(model.speechRule.tag)
+            val idx = keys.indexOf(config.speechRule.tag)
 
             val nextIndex = (idx + 1)
             val newTag = keys.getOrNull(nextIndex)
             if (newTag == null) {
-                if (model.speechRule.isTagDataEmpty()) {
-                    model.speechRule.target = SpeechTarget.ALL
-                    model.speechRule.resetTag()
+                if (config.speechRule.isTagDataEmpty()) {
+                    config.speechRule.target = SpeechTarget.ALL
+                    config.speechRule.resetTag()
                 } else {
                     showTagClearDialog = model
                     return
                 }
             } else {
-                model.speechRule.tag = newTag
+                config.speechRule.tag = newTag
                 runCatching {
-                    model.speechRule.tagName =
-                        SpeechRuleEngine.getTagName(context, speechRule, info = model.speechRule)
+                    config.speechRule.tagName =
+                        SpeechRuleEngine.getTagName(context, speechRule, info = config.speechRule)
                 }.onFailure {
-                    model.speechRule.tagName = ""
+                    config.speechRule.tagName = ""
                     context.displayErrorDialog(it)
                 }
 
             }
         }
         else {
-            appDb.speechRuleDao.getByRuleId(model.speechRule.tagRuleId)?.let {
-                model.speechRule.target = SpeechTarget.CUSTOM_TAG
-                model.speechRule.tag = it.tags.keys.first()
+            dbm.speechRuleDao.getByRuleId(config.speechRule.tagRuleId)?.let {
+                config.speechRule.target = SpeechTarget.CUSTOM_TAG
+                config.speechRule.tag = it.tags.keys.first()
             }
         }
 
-        appDb.systemTtsDao.updateTts(model)
+        dbm.systemTtsV2.update(model)
         if (model.isEnabled) SystemTtsService.notifyUpdateConfig()
     }
 
-    var deleteTts by remember { mutableStateOf<SystemTts?>(null) }
+    var deleteTts by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (deleteTts != null) {
         ConfigDeleteDialog(
-            onDismissRequest = { deleteTts = null }, name = deleteTts?.displayName ?: ""
+            onDismissRequest = { deleteTts = null }, content = deleteTts?.displayName ?: ""
         ) {
-            appDb.systemTtsDao.deleteTts(deleteTts!!)
+            dbm.systemTtsV2.delete(deleteTts!!)
             deleteTts = null
         }
     }
@@ -191,7 +198,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
         GroupAudioParamsDialog(onDismissRequest = { groupAudioParamsDialog = null },
             params = groupAudioParamsDialog!!.audioParams,
             onConfirm = {
-                appDb.systemTtsDao.updateGroup(
+                dbm.systemTtsV2.updateGroup(
                     groupAudioParamsDialog!!.copy(audioParams = it)
                 )
 
@@ -207,10 +214,6 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
         listState = listState, onMove = vm::reorder
     )
 
-    LaunchedEffect(models) {
-        println("update models: ${models.size}")
-    }
-
     var addGroupDialog by remember { mutableStateOf(false) }
     if (addGroupDialog) {
         var name by remember { mutableStateOf("") }
@@ -219,7 +222,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
             onTextChange = { name = it },
             onDismissRequest = { addGroupDialog = false }) {
             addGroupDialog = false
-            appDb.systemTtsDao.insertGroup(SystemTtsGroup(name = name))
+            dbm.systemTtsV2.insertGroup(SystemTtsGroup(name = name))
         }
     }
 
@@ -229,7 +232,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
         ListExportBottomSheet(onDismissRequest = { showGroupExportSheet = null }, list = list)
     }
 
-    var showExportSheet by remember { mutableStateOf<List<SystemTts>?>(null) }
+    var showExportSheet by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
     if (showExportSheet != null) {
         val jStr = remember { AppConst.jsonBuilder.encodeToString(showExportSheet!!) }
         ConfigExportBottomSheet(json = jStr) { showExportSheet = null }
@@ -238,11 +241,20 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
     var addPluginDialog by remember { mutableStateOf(false) }
     if (addPluginDialog) {
         PluginSelectionDialog(onDismissRequest = { addPluginDialog = false }) {
-            navigateToEdit(SystemTts(tts = PluginTTS(pluginId = it.pluginId)))
+            navigateToEdit(
+                SystemTtsV2(
+                    config = TtsConfigurationDTO(
+                        source = PluginTtsSource(
+                            pluginId = it.pluginId,
+                            locale = AppLocale.current(context).toCode()
+                        )
+                    )
+                )
+            )
         }
     }
 
-    var showAuditionDialog by remember { mutableStateOf<SystemTts?>(null) }
+    var showAuditionDialog by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (showAuditionDialog != null) AuditionDialog(systts = showAuditionDialog!!) {
         showAuditionDialog = null
     }
@@ -265,7 +277,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                         fun MenuItem(
                             icon: @Composable () -> Unit,
                             @StringRes title: Int,
-                            onClick: () -> Unit
+                            onClick: () -> Unit,
                         ) {
                             DropdownMenuItem(text = {
                                 Text(stringResource(id = title))
@@ -275,26 +287,19 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                             }, leadingIcon = icon)
                         }
 
-                        MenuItem(
-                            icon = { Icon(Icons.AutoMirrored.Default.PlaylistAdd, null) },
-                            title = R.string.systts_add_internal_tts
-                        ) {
-                            navigateToEdit(SystemTts(tts = MsTTS()))
-                        }
 
                         MenuItem(
                             icon = { Icon(Icons.Default.PhoneAndroid, null) },
                             title = R.string.add_local_tts
                         ) {
-                            navigateToEdit(SystemTts(tts = LocalTTS()))
+                            navigateToEdit(
+                                SystemTtsV2(
+                                    config = TtsConfigurationDTO(
+                                        source = LocalTtsSource(locale = AppConst.localeCode)
+                                    )
+                                )
+                            )
                         }
-
-//                        MenuItem(
-//                            icon = { Icon(Icons.Default.Http, null) },
-//                            title = R.string.systts_add_custom_tts
-//                        ) {
-////                                startTtsEditor(HttpTtsEditActivity::class.java)
-//                        }
 
                         MenuItem(
                             icon = { Icon(Icons.Default.Javascript, null) },
@@ -307,7 +312,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                             icon = { Icon(Icons.Default.Audiotrack, null) },
                             title = R.string.add_bgm_tts
                         ) {
-                            navigateToEdit(SystemTts(tts = BgmTTS()))
+                            navigateToEdit(SystemTtsV2(config = BgmConfiguration()))
                         }
 
                         MenuItem(
@@ -331,6 +336,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+
             LazyColumn(
                 Modifier
                     .fillMaxSize()
@@ -345,7 +351,7 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                         )
                     val key = "g_${g.id}"
                     stickyHeader(key = key) {
-                        ShadowReorderableItem(reorderableState = reorderState, key = key) {
+                        ShadowedDraggableItem(reorderableState = reorderState, key = key) {
                             Group(modifier = Modifier.detectReorderAfterLongPress(reorderState),
                                 name = g.name,
                                 isExpanded = g.isExpanded,
@@ -354,23 +360,23 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                                     vm.updateGroupEnable(groupWithSystemTts, it)
                                 },
                                 onClick = {
-                                    appDb.systemTtsDao.updateGroup(g.copy(isExpanded = !g.isExpanded))
+                                    dbm.systemTtsV2.updateGroup(g.copy(isExpanded = !g.isExpanded))
                                 },
                                 onDelete = {
-                                    appDb.systemTtsDao.deleteTts(*groupWithSystemTts.list.toTypedArray())
-                                    appDb.systemTtsDao.deleteGroup(g)
+                                    dbm.systemTtsV2.delete(*groupWithSystemTts.list.toTypedArray())
+                                    dbm.systemTtsV2.deleteGroup(g)
                                 },
                                 onRename = {
-                                    appDb.systemTtsDao.updateGroup(g.copy(name = it))
+                                    dbm.systemTtsV2.updateGroup(g.copy(name = it))
                                 },
                                 onCopy = {
                                     scope.launch {
                                         val group = g.copy(id = System.currentTimeMillis(),
                                             name = it.ifBlank { context.getString(R.string.unnamed) })
-                                        appDb.systemTtsDao.insertGroup(group)
-                                        appDb.systemTtsDao.getTtsByGroup(g.id)
+                                        dbm.systemTtsV2.insertGroup(group)
+                                        dbm.systemTtsV2.getByGroup(g.id)
                                             .forEachIndexed { index, tts ->
-                                                appDb.systemTtsDao.insertTts(
+                                                dbm.systemTtsV2.insert(
                                                     tts.copy(
                                                         id = System.currentTimeMillis() + index,
                                                         groupId = group.id
@@ -397,38 +403,42 @@ internal fun ListManagerScreen(vm: ListManagerViewModel = viewModel()) {
                             key = { _, v -> "${g.id}_${v.id}" }) { _, item ->
                             if (g.id == 1L) println(item.displayName + ", " + item.order)
 
-                            ShadowReorderableItem(
+                            ShadowedDraggableItem(
                                 reorderableState = reorderState,
                                 key = "${g.id}_${item.id}"
                             ) {
+                                val descriptor = remember(item) {
+                                    ItemDescriptorFactory.from(context, item)
+                                }
                                 Item(reorderState = reorderState,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                    name = item.displayName ?: "",
-                                    tagName = item.speechRule.tagName,
-                                    type = item.tts.getType(),
-                                    standby = item.speechRule.isStandby,
+                                    modifier = Modifier.padding(
+                                        horizontal = 8.dp,
+                                        vertical = 4.dp
+                                    ),
+                                    name = item.displayName,
+                                    tagName = descriptor.tagName,
+                                    type = descriptor.type,
+                                    standby = descriptor.standby,
                                     enabled = item.isEnabled,
                                     onEnabledChange = {
                                         vm.updateTtsEnabled(item, it)
                                         if (it) SystemTtsService.notifyUpdateConfig()
                                     },
-                                    desc = item.tts.getDescription(),
-                                    params = item.tts.getBottomContent(),
+                                    desc = descriptor.desc,
+                                    params = descriptor.bottom,
                                     onClick = { showQuickEdit = item },
                                     onLongClick = { switchSpeechTarget(item) },
                                     onCopy = {
                                         navigateToEdit(item.copy(id = System.currentTimeMillis()))
                                     },
                                     onDelete = { deleteTts = item },
-                                    onEdit = {
-                                        navController.navigate(
-                                            NavRoutes.TtsEdit.id,
-                                            Bundle().apply {
-                                                putParcelable(NavRoutes.TtsEdit.DATA, item)
-                                            }
-                                        )
+                                    onEdit = { navigateToEdit(item) },
+                                    onAudition = {
+                                        if (item.config is TtsConfigurationDTO) {
+                                            showAuditionDialog = item
+                                        } else
+                                            context.toast(R.string.not_support_audition)
                                     },
-                                    onAudition = { showAuditionDialog = item },
                                     onExport = {
                                         showExportSheet =
                                             listOf(item.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID))

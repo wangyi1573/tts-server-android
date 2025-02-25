@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -35,10 +36,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeComplile.get()
-    }
-
     android {
         packaging {
             resources {
@@ -51,14 +48,16 @@ android {
 dependencies {
     api(project(":lib-common"))
 
+    api(libs.bundles.coil)
     implementation(libs.bundles.markwon)
     implementation(libs.bundles.accompanist)
 
     val composeBom = platform(libs.compose.bom)
 //    def composeBom = platform("dev.chrisbanes.compose:compose-bom:2024.01.00-alpha01")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    api(composeBom)
+    androidTestApi(composeBom)
     api(libs.bundles.compose)
+    api(libs.bundles.compose.floatingx)
     api(libs.bundles.compose.material3)
 
     androidTestApi("androidx.compose.ui:ui-test-junit4")

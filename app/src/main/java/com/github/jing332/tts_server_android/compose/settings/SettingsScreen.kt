@@ -7,10 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
-import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.Audiotrack
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Groups
@@ -20,10 +18,10 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.NotificationsNone
-import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.SettingsBackupRestore
+import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Waves
@@ -241,25 +239,25 @@ fun SettingsScreen(drawerState: DrawerState) {
                 Text(stringResource(id = R.string.system_tts))
             }
 
-            var useExoDecoder by remember { SystemTtsConfig.isExoDecoderEnabled }
-            SwitchPreference(
-                title = { Text(stringResource(id = R.string.use_exo_decoder)) },
-                subTitle = { Text(stringResource(id = R.string.use_exo_decoder_summary)) },
-                checked = useExoDecoder,
-                onCheckedChange = { useExoDecoder = it },
-                icon = { Icon(Icons.Default.PlayCircleOutline, null) }
-            )
-
-//            var silenceAudio by remember { SystemTtsConfig.isSilenceAudio }
+//            var useExoDecoder by remember { SystemTtsConfig.isExoDecoderEnabled }
 //            SwitchPreference(
-//                title = { Text("Silence Audio") },
-//                subTitle = { /*TODO*/ },
-//                checked = silenceAudio,
-//                onCheckedChange = {
-//                    silenceAudio = it
-//                },
-//                icon = { Icon(Icons.Default.StackedLineChart, null) }
+//                title = { Text(stringResource(id = R.string.use_exo_decoder)) },
+//                subTitle = { Text(stringResource(id = R.string.use_exo_decoder_summary)) },
+//                checked = useExoDecoder,
+//                onCheckedChange = { useExoDecoder = it },
+//                icon = { Icon(Icons.Default.PlayCircleOutline, null) }
 //            )
+
+            var silenceAudio by remember { SystemTtsConfig.isSilenceSkipAudio }
+            SwitchPreference(
+                title = { Text(stringResource(R.string.silent_audio)) },
+                subTitle = { Text(stringResource(R.string.silent_audio_summary)) },
+                checked = silenceAudio,
+                onCheckedChange = {
+                    silenceAudio = it
+                },
+                icon = { Icon(Icons.Default.StackedLineChart, null) }
+            )
 
             var streamPlay by remember { SystemTtsConfig.isStreamPlayModeEnabled }
             SwitchPreference(
@@ -270,14 +268,14 @@ fun SettingsScreen(drawerState: DrawerState) {
                 icon = { Icon(Icons.Default.Waves, null) }
             )
 
-            var skipSilentText by remember { SystemTtsConfig.isSkipSilentText }
-            SwitchPreference(
-                title = { Text(stringResource(id = R.string.skip_request_silent_text)) },
-                subTitle = { Text(stringResource(id = R.string.skip_request_silent_text_summary)) },
-                checked = skipSilentText,
-                onCheckedChange = { skipSilentText = it },
-                icon = { Icon(Icons.AutoMirrored.Filled.TextSnippet, null) }
-            )
+//            var skipSilentText by remember { SystemTtsConfig.isSkipSilentText }
+//            SwitchPreference(
+//                title = { Text(stringResource(id = R.string.skip_request_silent_text)) },
+//                subTitle = { Text(stringResource(id = R.string.skip_request_silent_text_summary)) },
+//                checked = skipSilentText,
+//                onCheckedChange = { skipSilentText = it },
+//                icon = { Icon(Icons.AutoMirrored.Filled.TextSnippet, null) }
+//            )
 
             var foregroundService by remember { SystemTtsConfig.isForegroundServiceEnabled }
             SwitchPreference(
@@ -310,18 +308,18 @@ fun SettingsScreen(drawerState: DrawerState) {
                 label = maxRetryValue,
             )
 
-            var emptyAudioCount by remember { SystemTtsConfig.maxEmptyAudioRetryCount }
-            val emptyAudioCountValue =
-                if (emptyAudioCount == 0) stringResource(id = R.string.no_retries) else emptyAudioCount.toString()
-            SliderPreference(
-                title = { Text(stringResource(id = R.string.retry_count_when_audio_empty)) },
-                subTitle = { Text(stringResource(id = R.string.retry_count_when_audio_empty_summary)) },
-                value = emptyAudioCount.toFloat(),
-                onValueChange = { emptyAudioCount = it.toInt() },
-                valueRange = 0f..10f,
-                icon = { Icon(Icons.Default.Audiotrack, null) },
-                label = emptyAudioCountValue
-            )
+//            var emptyAudioCount by remember { SystemTtsConfig.maxEmptyAudioRetryCount }
+//            val emptyAudioCountValue =
+//                if (emptyAudioCount == 0) stringResource(id = R.string.no_retries) else emptyAudioCount.toString()
+//            SliderPreference(
+//                title = { Text(stringResource(id = R.string.retry_count_when_audio_empty)) },
+//                subTitle = { Text(stringResource(id = R.string.retry_count_when_audio_empty_summary)) },
+//                value = emptyAudioCount.toFloat(),
+//                onValueChange = { emptyAudioCount = it.toInt() },
+//                valueRange = 0f..10f,
+//                icon = { Icon(Icons.Default.Audiotrack, null) },
+//                label = emptyAudioCountValue
+//            )
 
             var standbyTriggeredIndex by remember { SystemTtsConfig.standbyTriggeredRetryIndex }
             val standbyTriggeredIndexValue = standbyTriggeredIndex.toString()

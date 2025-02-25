@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
+//    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -36,6 +38,10 @@ dependencies {
     api(libs.hutool.crypto)
     api(libs.bundles.network)
     api(libs.bundles.media3)
+    api(libs.kotlin.result)
+    api(libs.kotlinx.serialization.json)
+    api(libs.apache.commons.text)
+    api(libs.logging)
 
     implementation(libs.coreKtx)
     implementation(libs.appcompat)

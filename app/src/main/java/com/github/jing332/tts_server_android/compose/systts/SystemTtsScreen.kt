@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.TextSnippet
+import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,16 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.jing332.tts_server_android.R
+import com.github.jing332.tts_server_android.compose.SharedViewModel
 import com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SystemTtsScreen( vm: SystemTtsViewModel = viewModel()) {
+fun SystemTtsScreen(sharedVM: SharedViewModel) {
     val pagerState = rememberPagerState { 2 }
     val scope = rememberCoroutineScope()
+
+    MigrationTips()
 
     Scaffold(
         bottomBar = {
@@ -67,7 +69,7 @@ fun SystemTtsScreen( vm: SystemTtsViewModel = viewModel()) {
                                     }
                                 },
                                 icon = {
-                                    Icon(Icons.Default.TextSnippet, null)
+                                    Icon(Icons.AutoMirrored.Filled.TextSnippet, null)
                                 },
                                 label = {
                                     Text(stringResource(id = R.string.log))
@@ -88,7 +90,7 @@ fun SystemTtsScreen( vm: SystemTtsViewModel = viewModel()) {
             userScrollEnabled = false
         ) { index ->
             when (index) {
-                0 -> ListManagerScreen()
+                0 -> ListManagerScreen(sharedVM)
                 1 -> TtsLogScreen()
             }
         }

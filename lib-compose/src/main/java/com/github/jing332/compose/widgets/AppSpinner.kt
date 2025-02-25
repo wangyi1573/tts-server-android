@@ -39,6 +39,7 @@ private fun TextFieldSelectionDialog(
     value: Any,
     values: List<Any>,
     entries: List<String>,
+    icons: List<Any?> = emptyList(),
     enabled: Boolean = true,
 
     onSelectedChange: (key: Any, value: String) -> Unit,
@@ -59,6 +60,7 @@ private fun TextFieldSelectionDialog(
             value = value,
             values = values,
             entries = entries,
+            icons = icons,
             onClick = { v, entry ->
                 onSelectedChange.invoke(v, entry)
                 expanded = false
@@ -122,6 +124,7 @@ fun AppSpinner(
     value: Any,
     values: List<Any>,
     entries: List<String>,
+    icons: List<Any?> = emptyList(),
     maxDropDownCount: Int = ComposeWidgetSettings.maxDropDownCount,
     enabled: Boolean = true,
 
@@ -132,14 +135,28 @@ fun AppSpinner(
         onSelectedChange.invoke(values[0], entries[0])
     }
 
+    val index = remember(value, values) { values.indexOf(value) }
+    val icon = remember(icons, index) { icons.getOrNull(index) }
+
+    // Non-null causes placeholder issues
+    @Composable
+    fun leading(): @Composable (() -> Unit)? {
+        return if (leadingIcon == null && icon != null) {
+            {
+                AsyncCircleImage(icon)
+            }
+        } else null
+    }
+
     if (maxDropDownCount > 0 && values.size > maxDropDownCount) {
         TextFieldSelectionDialog(
             modifier = modifier,
             label = label,
-            leadingIcon = leadingIcon,
+            leadingIcon = leading(),
             value = value,
             values = values,
             entries = entries,
+            icons = icons,
             enabled = enabled,
             onValueSame = onValueSame,
             onSelectedChange = onSelectedChange,
@@ -148,10 +165,11 @@ fun AppSpinner(
         DropdownTextField(
             modifier = modifier,
             label = label,
-            leadingIcon = leadingIcon,
+            leadingIcon = leading(),
             value = value,
             values = values,
             entries = entries,
+            icons = icons,
             enabled = enabled,
             onSelectedChange = onSelectedChange,
             onValueSame = onValueSame,

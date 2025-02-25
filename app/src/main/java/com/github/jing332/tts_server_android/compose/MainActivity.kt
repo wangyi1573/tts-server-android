@@ -3,7 +3,6 @@
 package com.github.jing332.tts_server_android.compose
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
@@ -37,7 +36,6 @@ import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.BatteryFull
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -48,6 +46,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -69,44 +68,37 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
-import androidx.navigation.NavController
-import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.NavDestination
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.jing332.common.DateFormatConst
-import com.github.jing332.common.utils.clone
 import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.performLongPress
 import com.github.jing332.common.utils.toast
 import com.github.jing332.compose.widgets.AppLauncherIcon
+import com.github.jing332.database.dbm
+import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.tts_server_android.BuildConfig
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.ShortCuts
-import com.github.jing332.tts_server_android.compose.forwarder.ms.MsTtsForwarderScreen
 import com.github.jing332.tts_server_android.compose.forwarder.systts.SystemTtsForwarderScreen
 import com.github.jing332.tts_server_android.compose.nav.NavRoutes
 import com.github.jing332.tts_server_android.compose.settings.SettingsScreen
 import com.github.jing332.tts_server_android.compose.systts.SystemTtsScreen
-import com.github.jing332.tts_server_android.compose.systts.list.edit.TtsEditContainerScreen
+import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.TtsEditContainerScreen
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.conf.AppConfig
-import com.github.jing332.tts_server_android.constant.AppConst
-import com.github.jing332.tts_server_android.data.appDb
-import com.github.jing332.tts_server_android.data.entities.systts.SystemTts
-import com.github.jing332.tts_server_android.model.speech.tts.ITextToSpeechEngine
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity
 import com.github.jing332.tts_server_android.utils.MyTools.killBattery
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.launch
 
 
@@ -124,9 +116,25 @@ fun Context.asActivity(): Activity {
 private var updateCheckTrigger by mutableStateOf(false)
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private val logger = KotlinLogging.logger { this::class.java.name }
+    }
+
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        val json = """
+//           [ { "group": { "id": 1, "name": "默认分组" }, "list": [ { "id": 1681521093149, "displayName": "bgm", "speechRule": { "target": 3 }, "tts": { "#type": "bgm", "musicList": [ "/storage/emulated/0/Music/听琴如修禅-巫娜古琴100首" ], "volume": 87, "audioFormat": { } } }, { "id": 1734523614731, "displayName": "王隔壁_剧有范MK-III[男|青年]", "tts": { "#type": "plugin", "pluginId": "www.gstudios.com", "locale": "zh-CN", "voice": "758", "rate": 52, "audioFormat": { "sampleRate": 48000 } }, "order": 2 }, { "id": 1738145879439, "displayName": "MultiTTS", "tts": { "#type": "local", "engine": "org.nobody.multitts", "locale": "zh-CN", "voiceName": "bdetts_f32pangbai", "isDirectPlayMode": false, "audioFormat": { } }, "order": 1 } ] }, { "group": { "id": 1681999286014, "name": "呱呱", "order": 1, "audioParams": { "speed": 1.3 } }, "list": [ { "id": 1681529196730, "groupId": 1681999286014, "displayName": "百合 [现言|古言]", "speechRule": { "target": 4, "tag": "narration", "tagRuleId": "ttsrv.multi_voice", "tagName": "旁白" }, "tts": { "#type": "plugin", "pluginId": "www.gstudios.com", "locale": "zh-CN", "voice": "4", "rate": 1, "audioFormat": { "sampleRate": 48000 }, "audioPlayer": { "rate": 1.0, "pitch": 1.0, "volume": 1.0 } } }, { "id": 1681999236498, "groupId": 1681999286014, "displayName": "芷嫣 [现言|古言]", "speechRule": { "target": 4, "tag": "dialogue", "tagRuleId": "ttsrv.multi_voice", "tagName": "对话" }, "tts": { "#type": "plugin", "pluginId": "www.gstudios.com", "locale": "zh-CN", "voice": "53", "audioFormat": { "sampleRate": 48000 }, "audioPlayer": { "rate": 1.0, "pitch": 1.0, "volume": 1.0 }, "audioParams": { "volume": 2.11 } }, "order": 1 }, { "id": 1684907918205, "groupId": 1681999286014, "displayName": "芷嫣MK-II [现言|古言]", "tts": { "#type": "plugin", "pluginId": "www.gstudios.com", "locale": "zh-CN", "voice": "139", "rate": 49, "audioFormat": { "sampleRate": 48000 }, "audioPlayer": { "rate": 1.0, "pitch": 1.0, "volume": 1.0 } }, "order": 2 } ] }, { "group": { "id": 1704010979156, "name": "vits", "order": 2 }, "list": [ { "id": 1704010998111, "groupId": 1704010979156, "displayName": "八重神子_ZH", "tts": { "#type": "plugin", "pluginId": "v2.genshinvoice.top", "locale": "zh-CN", "voice": "八重神子_ZH", "audioFormat": { "sampleRate": 44100 } } } ] }, { "group": { "id": 1681820023716, "name": "本地", "order": 3 }, "list": [ { "id": 1681820029153, "groupId": 1681820023716, "displayName": "搜狗TTS (org.nobody.sgtts)", "speechRule": { "target": 4, "tag": "dialogue", "tagRuleId": "ttsrv.multi_voice", "tagName": "对话", "tagData": { "defaultLanguage": "true" } }, "tts": { "#type": "local", "engine": "org.nobody.sgtts", "locale": "zh-CN", "voiceName": "qingfeng", "rate": 85, "audioFormat": { } }, "order": 1 }, { "id": 1681820053515, "groupId": 1681820023716, "displayName": "搜狗TTS (org.nobody.sgtts)", "speechRule": { "target": 4, "tag": "dialogue", "tagRuleId": "ttsrv.multi_voice", "tagName": "对话" }, "tts": { "#type": "local", "engine": "org.nobody.sgtts", "locale": "zh-CN", "voiceName": "yaxinpro", "pitch": 72, "rate": 69, "audioFormat": { } } }, { "id": 1692514349137, "groupId": 1681820023716, "displayName": "度小宇", "tts": { "#type": "plugin", "pluginId": "tsn.baidu.com", "locale": "zh", "voice": "1", "audioFormat": { } }, "order": 2 } ] }, { "group": { "id": 12333, "name": "示例-旁白对话BGM", "order": 4 }, "list": [ { "id": 1690331046541, "groupId": 12333, "displayName": "⚠️请在右上角打开多语音！晓晓（zh-CN-XiaoxiaoNeural）", "speechRule": { "target": 4, "tag": "dialogue", "tagRuleId": "ttsrv.multi_voice" }, "tts": { "#type": "internal" } }, { "id": 1690331074092, "groupId": 12333, "displayName": "云健（zh-CN-YunjianNeural）", "speechRule": { "target": 4, "tag": "narration", "tagRuleId": "ttsrv.multi_voice" }, "tts": { "#type": "internal", "voiceName": "zh-CN-YunjianNeural" }, "order": 1 } ] }, { "group": { "id": 1689744455358, "name": "微软专业", "order": 5, "isExpanded": true }, "list": [ { "id": 1689744463741, "groupId": 1689744455358, "displayName": "云希 (zh-CN-YunxiNeural)", "isEnabled": true, "speechRule": { "tag": "narration", "tagRuleId": "ttsrv.multi_voice", "tagName": "旁白" }, "tts": { "#type": "plugin", "pluginId": "com.microsoft.translator", "locale": "zh-CN", "voice": "zh-CN-YunxiNeural", "data": { "style": "newscast", "languageSkill": "zh-CN", "role": "Boy", "styleDegree": "0.96" }, "volume": 100, "rate": 52, "audioFormat": { "sampleRate": 24000 } } } ] }, { "group": { "id": 1681554761681, "name": "微软", "order": 6 }, "list": [ { "id": 1681554671030, "groupId": 1681554761681, "displayName": "晓甄 (zh-CN-XiaozhenNeural)", "tts": { "#type": "plugin", "pluginId": "com.microsoft.translator", "locale": "zh-CN", "voice": "zh-CN-YunxiNeural", "data": { "style": "narration-relaxed", "styleDegree": "1.55", "role": "Narrator" }, "volume": 43, "rate": 62, "audioFormat": { "sampleRate": 24000 }, "audioParams": { "speed": 1.0, "volume": 1.0, "pitch": 1.0 } }, "order": 1 }, { "id": 1682419313176, "groupId": 1681554761681, "displayName": "Xiaochen Multilingual (zh-CN-XiaochenMultilingualNeural)", "tts": { "#type": "plugin", "pluginId": "com.microsoft.translator", "locale": "zh-CN", "voice": "zh-CN-XiaochenMultilingualNeural", "data": { "style": "", "styleDegree": "1.00", "role": "Boy", "languageSkill": "" }, "volume": 100, "rate": 61, "audioFormat": { "sampleRate": 24000 } } } ] } ]
+//        """.trimIndent()
+//
+//        AppConst.jsonBuilder.decodeFromString<List<GroupWithV1TTS>>(json).forEach {
+//            dbm.systemTtsDao.insertGroup(it.group)
+//            it.list.forEach {
+//                dbm.systemTtsDao.insertTts(it)
+//            }
+//        }
+
 
         ShortCuts.buildShortCuts(this)
         setContent {
@@ -148,14 +156,7 @@ class MainActivity : AppCompatActivity() {
                             notificationPermission.launchPermissionRequest()
                         }
                     }
-                }/* else {
-                    val enabled = NotificationManagerCompat.from(this).areNotificationsEnabled()
-                    if (!enabled) {
-                        LaunchedEffect(Unit) {
-                            gotoNotificationManager(this@MainActivity)
-                        }
-                    }
-                }*/
+                }
 
                 LaunchedEffect(Unit) {
                     showAutoCheckUpdaterDialog = AppConfig.isAutoCheckUpdateEnabled.value
@@ -179,27 +180,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-//private fun gotoNotificationManager(context: Context) {
-//    try {
-//        val intent = Intent()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //A8.0
-//            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-//            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-//            intent.putExtra(Settings.EXTRA_CHANNEL_ID, context.applicationInfo.uid)
-//        }
-//        intent.putExtra("app_package", context.packageName)
-//        intent.putExtra("app_uid", context.applicationInfo.uid)
-//        context.startActivity(intent)
-//    } catch (e: Exception) {
-//        e.printStackTrace()
-//        val intent = Intent()
-//        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//        val uri = Uri.fromParts("package", context.packageName, null)
-//        intent.setData(uri)
-//        context.startActivity(intent)
-//    }
-//}
 
 @Composable
 private fun MainScreen(finish: () -> Unit) {
@@ -248,44 +228,39 @@ private fun MainScreen(finish: () -> Unit) {
                     drawerState,
                 )
             }) {
+
+            val sharedVM: SharedViewModel = viewModel()
             NavHost(
                 navController = navController,
                 startDestination = NavRoutes.SystemTTS.id
             ) {
-                composable(NavRoutes.SystemTTS.id) { SystemTtsScreen() }
+                composable(NavRoutes.SystemTTS.id) { SystemTtsScreen(sharedVM) }
                 composable(NavRoutes.SystemTtsForwarder.id) {
                     SystemTtsForwarderScreen()
                 }
-                composable(NavRoutes.MsTtsForwarder.id) { MsTtsForwarderScreen() }
                 composable(NavRoutes.Settings.id) { SettingsScreen(drawerState) }
 
-                composable(NavRoutes.TtsEdit.id) { stackEntry ->
-                    val systts: SystemTts =
-                        stackEntry.arguments?.getParcelable(NavRoutes.TtsEdit.DATA)
-                            ?: return@composable
-                    var stateSystts by rememberSaveable {
-                        mutableStateOf(systts.run {
-                            if (tts.locale.isBlank()) {
-                                copy(
-                                    tts = tts.clone<ITextToSpeechEngine>()!!
-                                        .apply { locale = AppConst.localeCode }
-                                )
-                            } else
-                                this
-                        })
+                composable(NavRoutes.TtsEdit.id) {
+                    var stateSystemTts by rememberSaveable {
+                        mutableStateOf(
+                            checkNotNull(sharedVM.getOnce<SystemTtsV2>(NavRoutes.TtsEdit.DATA)) {
+                                "Not found systemTts from sharedVM"
+                            }
+                        )
                     }
+
                     TtsEditContainerScreen(
                         modifier = Modifier
                             .fillMaxSize(),
-                        systts = stateSystts,
+                        systts = stateSystemTts,
                         onSysttsChange = {
-                            stateSystts = it
+                            stateSystemTts = it
                             println("UpdateSystemTTS: $it")
                         },
                         onSave = {
                             navController.popBackStack()
-                            appDb.systemTtsDao.insertTts(stateSystts)
-                            if (stateSystts.isEnabled) SystemTtsService.notifyUpdateConfig()
+                            dbm.systemTtsV2.insert(stateSystemTts)
+                            if (stateSystemTts.isEnabled) SystemTtsService.notifyUpdateConfig()
                         },
                         onCancel = {
                             navController.popBackStack()
@@ -315,7 +290,7 @@ fun NavDrawerContent(
         selected: Boolean = false,
         icon: @Composable () -> Unit,
         label: @Composable () -> Unit,
-        onClick: () -> Unit
+        onClick: () -> Unit,
     ) {
         NavigationDrawerItem(
             modifier = Modifier.padding(vertical = 2.dp),
@@ -335,7 +310,7 @@ fun NavDrawerContent(
         onClick: () -> Unit = {
             scope.launch { drawerState.close() }
             navController.navigateSingleTop(targetScreen.id, popUpToMain = true)
-        }
+        },
     ) {
         val isSelected = navController.currentDestination?.route == targetScreen.id
         DrawerItem(
@@ -361,7 +336,7 @@ fun NavDrawerContent(
             .clip(MaterialTheme.shapes.small)
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(bounded = true),
+                indication = ripple(bounded = true),
                 onClick = {
                     isBuildTimeExpanded = !isBuildTimeExpanded
                 },
@@ -454,48 +429,12 @@ fun NavDrawerContent(
     }
 }
 
-@SuppressLint("RestrictedApi")
-fun NavController.navigate(
-    route: String,
-    argsBuilder: Bundle.() -> Unit = {},
-    navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null
-) {
-    navigate(route, Bundle().apply(argsBuilder), navOptions, navigatorExtras)
-}
-
-/*
-* 可传递 Bundle 到 Navigation
-* */
-@SuppressLint("RestrictedApi")
-fun NavController.navigate(
-    route: String,
-    args: Bundle,
-    navOptions: NavOptions? = null,
-    navigatorExtras: Navigator.Extras? = null
-) {
-    val routeLink = NavDeepLinkRequest
-        .Builder
-        .fromUri(NavDestination.createRoute(route).toUri())
-        .build()
-
-    val deepLinkMatch = graph.matchDeepLink(routeLink)
-    if (deepLinkMatch != null) {
-        val destination = deepLinkMatch.destination
-        val id = destination.id
-        navigate(id, args, navOptions, navigatorExtras)
-    } else {
-        navigate(route, navOptions, navigatorExtras)
-    }
-}
-
 /**
  * 单例并清空其他栈
  */
 fun NavHostController.navigateSingleTop(
     route: String,
-    args: Bundle? = null,
-    popUpToMain: Boolean = false
+    popUpToMain: Boolean = false,
 ) {
     val navController = this
     val navOptions = NavOptions.Builder()
@@ -509,8 +448,6 @@ fun NavHostController.navigateSingleTop(
         }
         .setRestoreState(true)
         .build()
-    if (args == null)
-        navController.navigate(route, navOptions)
-    else
-        navController.navigate(route, args, navOptions)
+
+    navController.navigate(route, navOptions)
 }
