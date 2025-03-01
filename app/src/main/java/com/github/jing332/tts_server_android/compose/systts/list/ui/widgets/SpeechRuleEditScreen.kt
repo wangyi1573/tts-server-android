@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -20,6 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -33,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -42,7 +45,6 @@ import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.toast
 import com.github.jing332.compose.widgets.AppDialog
 import com.github.jing332.compose.widgets.AppSpinner
-import com.github.jing332.compose.widgets.RowToggleButtonGroup
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.SpeechRule
 import com.github.jing332.database.entities.systts.AudioParams
@@ -199,109 +201,125 @@ fun SpeechRuleEditScreen(
                         showTagClearDialog = false
                     })
             }
-            Column(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .align(Alignment.CenterHorizontally),
+
+            var showTagOptions by remember { mutableStateOf(false) }
+            SingleChoiceSegmentedButtonRow(
+                Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterHorizontally)
             ) {
-
-                var showTagOptions by remember { mutableStateOf(false) }
-                RowToggleButtonGroup(
-                    selectionIndex = if (config.speechRule.target == SpeechTarget.ALL) 0 else 1,
-                    buttonCount = 2,
-                    buttonIcons = arrayOf(
-                        painterResource(id = R.drawable.ic_baseline_select_all_24),
-                        painterResource(id = R.drawable.baseline_tag_24)
-                    ),
-                    buttonTexts = arrayOf(
-                        stringResource(id = R.string.ra_all),
-                        stringResource(id = R.string.tag)
-                    ),
-                    onButtonClick = { index ->
-                        if (index == 1) {
-                            if (config.speechRule.target == SpeechTarget.CUSTOM_TAG)
-                                showTagOptions = true
-                            else
-                                onSysttsChange(
-                                    systts.copy(
-                                        config = config.copy(
-                                            speechRule = config.speechRule.copy(target = SpeechTarget.CUSTOM_TAG)
-                                        )
+                SegmentedButton(
+                    config.speechRule.target != SpeechTarget.TAG,
+                    onClick = {
+                        if (config.speechRule.isTagDataEmpty())
+                            onSysttsChange(
+                                systts.copy(
+                                    config = config.copy(
+                                        speechRule = config.speechRule.copy(
+                                            tagName = "",
+                                            target = SpeechTarget.ALL
+                                        ).apply { resetTag() }
                                     )
                                 )
-                        } else { // 朗读全部
-                            if (config.speechRule.isTagDataEmpty())
-                                onSysttsChange(
-                                    systts.copy(
-                                        config = config.copy(
-                                            speechRule = config.speechRule.copy(
-                                                tagName = "",
-                                                target = SpeechTarget.ALL
-                                            ).apply { resetTag() }
-                                        )
-                                    )
-                                )
-                            else
-                                showTagClearDialog = true
-                        }
+                            )
+                        else
+                            showTagClearDialog = true
                     },
-                )
+                    shape = SegmentedButtonDefaults.itemShape(0, 2),
+                    icon = { Icon(Icons.Default.SelectAll, null) },
+                ) {
+                    Text(stringResource(id = R.string.ra_all), maxLines = 1)
+                }
 
-                DropdownMenu(
-                    expanded = showTagOptions,
-                    onDismissRequest = { showTagOptions = false }) {
-                    Text(
-                        text = stringResource(R.string.tag_data),
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    HorizontalDivider()
-                    DropdownMenuItem(
-                        text = { Text(stringResource(id = R.string.copy)) },
-                        onClick = {
-                            showTagOptions = false
-                            val jStr = AppConst.jsonBuilder.encodeToString(config.speechRule)
-                            ClipboardUtils.copyText(jStr)
-                            context.toast(R.string.copied)
-                        })
-                    DropdownMenuItem(
-                        text = { Text(stringResource(id = R.string.paste)) },
-                        onClick = {
-                            showTagOptions = false
-                            val jStr = ClipboardUtils.text.toString()
-                            if (jStr.isBlank()) {
-                                context.toast(R.string.format_error)
-                                return@DropdownMenuItem
-                            }
-
-                            runCatching {
-                                val info =
-                                    AppConst.jsonBuilder.decodeFromString<SpeechRuleInfo>(jStr)
-                                onSysttsChange(systts.copy(config = config.copy(speechRule = info)))
-                            }.onSuccess {
-                                context.longToast(R.string.save_success)
-                            }.onFailure {
-                                context.displayErrorDialog(
-                                    it,
-                                    context.getString(R.string.format_error)
+                SegmentedButton(
+                    selected = config.speechRule.target == SpeechTarget.TAG,
+                    onClick = {
+                        if (config.speechRule.target == SpeechTarget.TAG)
+                            showTagOptions = true
+                        else
+                            onSysttsChange(
+                                systts.copy(
+                                    config = config.copy(
+                                        speechRule = config.speechRule.copy(target = SpeechTarget.TAG)
+                                    )
                                 )
+                            )
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(1, 2),
+                    icon = {
+                        Icon(
+                            Icons.Default.Tag,
+                            null,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    },
+                ) {
+                    Text(
+                        stringResource(id = R.string.tag),
+                        maxLines = 1,
+                        modifier = Modifier.padding(start = 4.dp, end = 10.dp)
+                    )
+
+                    DropdownMenu(
+                        expanded = showTagOptions,
+                        onDismissRequest = { showTagOptions = false }) {
+                        Text(
+                            text = stringResource(R.string.tag_data),
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        HorizontalDivider()
+                        DropdownMenuItem(
+                            text = { Text(stringResource(id = R.string.copy)) },
+                            onClick = {
+                                showTagOptions = false
+                                val jStr =
+                                    AppConst.jsonBuilder.encodeToString(config.speechRule)
+                                ClipboardUtils.copyText(jStr)
+                                context.toast(R.string.copied)
+                            })
+                        DropdownMenuItem(
+                            text = { Text(stringResource(id = R.string.paste)) },
+                            onClick = {
+                                showTagOptions = false
+                                val jStr = ClipboardUtils.text.toString()
+                                if (jStr.isBlank()) {
+                                    context.toast(R.string.format_error)
+                                    return@DropdownMenuItem
+                                }
+
+                                runCatching {
+                                    val info =
+                                        AppConst.jsonBuilder.decodeFromString<SpeechRuleInfo>(
+                                            jStr
+                                        )
+                                    onSysttsChange(systts.copy(config = config.copy(speechRule = info)))
+                                }.onSuccess {
+                                    context.longToast(R.string.save_success)
+                                }.onFailure {
+                                    context.displayErrorDialog(
+                                        it,
+                                        context.getString(R.string.format_error)
+                                    )
+                                }
                             }
-                        })
+                        )
+                    }
                 }
             }
 
-            AnimatedVisibility(visible = config.speechRule.target == SpeechTarget.CUSTOM_TAG) {
-                Row(Modifier.padding(top = 4.dp)) {
+            AnimatedVisibility(visible = config.speechRule.target == SpeechTarget.TAG) {
+                Row(Modifier) {
                     AppSpinner(
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 4.dp),
-                        label = { Text(stringResource(id = R.string.speech_rule_script)) },
+                        labelText = stringResource(R.string.speech_rule_script),
                         value = config.speechRule.tagRuleId,
                         values = speechRules.map { it.ruleId },
                         entries = speechRules.map { it.name },
                         onSelectedChange = { k, v ->
-                            if (config.speechRule.target != SpeechTarget.CUSTOM_TAG) return@AppSpinner
+                            if (config.speechRule.target != SpeechTarget.TAG) return@AppSpinner
                             onSysttsChange(
                                 systts.copy(
                                     config = config.copy(
@@ -319,12 +337,12 @@ fun SpeechRuleEditScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(start = 4.dp),
-                            label = { Text(stringResource(id = R.string.tag)) },
+                            labelText = stringResource(R.string.tag),
                             value = config.speechRule.tag,
                             values = speechRule.tags.keys.toList(),
                             entries = speechRule.tags.values.toList(),
                             onSelectedChange = { k, _ ->
-                                if (config.speechRule.target != SpeechTarget.CUSTOM_TAG) return@AppSpinner
+                                if (config.speechRule.target != SpeechTarget.TAG) return@AppSpinner
                                 onSysttsChange(
                                     systts.copy(
                                         config = config.copy(
@@ -342,7 +360,7 @@ fun SpeechRuleEditScreen(
                 CustomTagScreen(
                     info = config.speechRule,
                     onInfoChange = {
-                        if (config.speechRule.target == SpeechTarget.CUSTOM_TAG)
+                        if (config.speechRule.target == SpeechTarget.TAG)
                             onSysttsChange(systts.copy(config = config.copy(speechRule = it)))
                     },
                     speechRule = it
@@ -412,7 +430,7 @@ private fun CustomTagScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp),
-                    label = { Text(label) },
+                    labelText =  label ,
                     value = value.ifEmpty { defaultValue },
                     values = itemsMap.keys.toList(),
                     entries = itemsMap.values.toList(),

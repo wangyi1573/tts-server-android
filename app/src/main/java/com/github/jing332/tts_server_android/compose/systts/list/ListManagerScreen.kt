@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -50,7 +52,6 @@ import com.github.jing332.tts_server_android.AppLocale
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.AppDefaultProperties
 import com.github.jing332.tts_server_android.compose.LocalBottomBarBehavior
-import com.github.jing332.tts_server_android.compose.LocalDrawerState
 import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.SharedViewModel
 import com.github.jing332.tts_server_android.compose.nav.NavRoutes
@@ -85,7 +86,6 @@ internal fun ListManagerScreen(
     val navController = LocalNavController.current
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val drawerState = LocalDrawerState.current
 
     var showSortDialog by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
     if (showSortDialog != null) SortDialog(
@@ -120,9 +120,15 @@ internal fun ListManagerScreen(
             tagData = config.speechRule.tagData.toString(),
             onDismissRequest = { showTagClearDialog = null },
             onConfirm = {
-                config.speechRule.target = SpeechTarget.ALL
-                config.speechRule.resetTag()
-                dbm.systemTtsV2.update(systts)
+                dbm.systemTtsV2.update(
+                    systts.copy(
+                        config = config.copy(
+                            speechRule = config.speechRule.copy(
+                                target = SpeechTarget.ALL,
+                            ).apply { resetTag() },
+                        )
+                    )
+                )
                 if (systts.isEnabled) SystemTtsService.notifyUpdateConfig()
                 showTagClearDialog = null
             }
@@ -135,11 +141,11 @@ internal fun ListManagerScreen(
             context.longToast(R.string.systts_drag_tip_msg)
         }
 
-        val model = systts.copy()
-        val config = model.config as TtsConfigurationDTO
+        val config = systts.config as TtsConfigurationDTO
         if (config.speechRule.target == SpeechTarget.BGM) return
+        val ruleData = config.speechRule.copy()
 
-        if (config.speechRule.target == SpeechTarget.CUSTOM_TAG) dbm.speechRuleDao.getByRuleId(
+        if (config.speechRule.target == SpeechTarget.TAG) dbm.speechRuleDao.getByRuleId(
             config.speechRule.tagRuleId
         )?.let { speechRule ->
             val keys = speechRule.tags.keys.toList()
@@ -148,34 +154,34 @@ internal fun ListManagerScreen(
             val nextIndex = (idx + 1)
             val newTag = keys.getOrNull(nextIndex)
             if (newTag == null) {
-                if (config.speechRule.isTagDataEmpty()) {
-                    config.speechRule.target = SpeechTarget.ALL
-                    config.speechRule.resetTag()
+                if (ruleData.isTagDataEmpty()) {
+                    ruleData.target = SpeechTarget.ALL
+                    ruleData.resetTag()
                 } else {
-                    showTagClearDialog = model
+                    showTagClearDialog = systts
                     return
                 }
             } else {
-                config.speechRule.tag = newTag
+                ruleData.tag = newTag
                 runCatching {
-                    config.speechRule.tagName =
-                        SpeechRuleEngine.getTagName(context, speechRule, info = config.speechRule)
+                    ruleData.tagName =
+                        SpeechRuleEngine.getTagName(context, speechRule, info = ruleData)
                 }.onFailure {
-                    config.speechRule.tagName = ""
+                    ruleData.tagName = ""
                     context.displayErrorDialog(it)
                 }
 
             }
         }
         else {
-            dbm.speechRuleDao.getByRuleId(config.speechRule.tagRuleId)?.let {
-                config.speechRule.target = SpeechTarget.CUSTOM_TAG
-                config.speechRule.tag = it.tags.keys.first()
+            dbm.speechRuleDao.getByRuleId(ruleData.tagRuleId)?.let {
+                ruleData.target = SpeechTarget.TAG
+                ruleData.tag = it.tags.keys.first()
             }
         }
 
-        dbm.systemTtsV2.update(model)
-        if (model.isEnabled) SystemTtsService.notifyUpdateConfig()
+        dbm.systemTtsV2.update(systts.copy(config = systts.ttsConfig.copy(speechRule = ruleData)))
+        if (systts.isEnabled) SystemTtsService.notifyUpdateConfig()
     }
 
     var deleteTts by remember { mutableStateOf<SystemTtsV2?>(null) }
@@ -255,21 +261,24 @@ internal fun ListManagerScreen(
     }
 
     var showOptions by rememberSaveable { mutableStateOf(false) }
-
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            NavTopAppBar(drawerState = drawerState, title = {
-                Text(stringResource(id = R.string.system_tts))
-            }, actions = {
-                IconButton(onClick = { showOptions = true }) {
-                    Icon(Icons.Default.MoreVert, stringResource(id = R.string.more_options))
-                    MenuMoreOptions(
-                        expanded = showOptions,
-                        onDismissRequest = { showOptions = false },
-                        onExportAll = { showGroupExportSheet = models },
-                    )
-                }
-            })
+            NavTopAppBar(
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(stringResource(id = R.string.system_tts))
+                }, actions = {
+                    IconButton(onClick = { showOptions = true }) {
+                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.more_options))
+                        MenuMoreOptions(
+                            expanded = showOptions,
+                            onDismissRequest = { showOptions = false },
+                            onExportAll = { showGroupExportSheet = models },
+                        )
+                    }
+                })
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {

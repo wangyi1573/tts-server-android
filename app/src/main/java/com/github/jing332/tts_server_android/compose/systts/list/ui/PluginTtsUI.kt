@@ -6,10 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +36,6 @@ import com.github.jing332.tts_server_android.compose.systts.AuditionDialog
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.AuditionTextField
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.BasicInfoEditScreen
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.SaveActionHandler
-import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.TtsTopAppBar
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,6 +99,7 @@ class PluginTtsUI : IConfigUI() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun FullEditScreen(
         modifier: Modifier,
@@ -110,33 +107,22 @@ class PluginTtsUI : IConfigUI() {
         onSystemTtsChange: (SystemTtsV2) -> Unit,
         onSave: () -> Unit,
         onCancel: () -> Unit,
+        content: @Composable () -> Unit,
     ) {
-        Scaffold(
-            modifier = modifier,
-            topBar = {
-                TtsTopAppBar(
-                    title = { Text(text = stringResource(id = R.string.edit_plugin_tts)) },
-                    onBackAction = onCancel,
-                    onSaveAction = {
-                        onSave()
-                    }
-                )
-            }
-        ) { paddingValues ->
-            EditContentScreen(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .verticalScroll(
-                        rememberScrollState()
-                    ),
-                systts = systemTts, onSysttsChange = onSystemTtsChange,
-            )
+        DefaultFullEditScreen(
+            modifier,
+            title = stringResource(id = R.string.edit_plugin_tts),
+            onCancel = onCancel,
+            onSave = onSave,
+        ) {
+            content()
+            EditContentScreen(systts = systemTts, onSysttsChange = onSystemTtsChange,)
         }
     }
 
     @Composable
     fun EditContentScreen(
-        modifier: Modifier,
+        modifier: Modifier = Modifier,
         systts: SystemTtsV2,
         onSysttsChange: (SystemTtsV2) -> Unit,
         showBasicInfo: Boolean = true,
@@ -232,7 +218,7 @@ class PluginTtsUI : IConfigUI() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 4.dp),
-                            label = { Text(stringResource(id = R.string.language)) },
+                            labelText = stringResource(R.string.language),
                             value = tts.locale,
                             values = vm.locales.map { it.first },
                             entries = vm.locales.map { it.second },
@@ -252,7 +238,7 @@ class PluginTtsUI : IConfigUI() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 4.dp),
-                            label = { Text(stringResource(id = R.string.label_voice)) },
+                            labelText = stringResource(R.string.label_voice),
                             value = tts.voice,
                             values = vm.voices.map { it.id },
                             entries = vm.voices.map { it.name },

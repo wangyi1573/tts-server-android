@@ -2,6 +2,7 @@ package com.github.jing332.tts_server_android.compose.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -72,9 +73,6 @@ internal fun DividerPreference(title: @Composable () -> Unit) {
             .fillMaxWidth()
             .padding(horizontal = horizontalPadding)
             .padding(top = verticalPadding + 4.dp)
-            .semantics(true) {
-                contentDescription = context.getString(R.string.divider_preference_desc)
-            }
             .minimumInteractiveComponentSize()
     ) {
         Row(
@@ -104,13 +102,16 @@ internal fun SwitchPreference(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     BasePreferenceWidget(
         modifier = modifier
             .focusable()
             .toggleable(
-                role = Role.Switch,
                 value = checked,
+                role = Role.Switch,
                 enabled = true,
+                interactionSource = interactionSource,
+                indication = ripple(),
                 onValueChange = { onCheckedChange(!checked) }),
 
         title = title,
@@ -119,6 +120,7 @@ internal fun SwitchPreference(
         content = {
             Switch(
                 checked = checked,
+                interactionSource = interactionSource,
                 onCheckedChange = null,
                 modifier = Modifier.align(Alignment.CenterVertically)
 

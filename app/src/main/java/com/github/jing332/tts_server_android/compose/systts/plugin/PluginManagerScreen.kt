@@ -36,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,10 +44,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -124,9 +128,15 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         navController.navigate(NavRoutes.PluginEdit.id)
     }
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(contentWindowInsets = WindowInsets(0),
-        modifier = Modifier.fillMaxSize(), topBar = {
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
             TopAppBar(
+                scrollBehavior = scrollBehavior,
                 title = { Text(stringResource(id = R.string.plugin_manager)) },
                 navigationIcon = {
                     IconButton(onClick = onFinishActivity) {
@@ -269,7 +279,27 @@ private fun Item(
     onDelete: () -> Unit,
 ) {
     val context = LocalContext.current
-    ElevatedCard(modifier = modifier, onClick = {
+    ElevatedCard(modifier = modifier.semantics {
+        customActions =
+            listOf(
+                CustomAccessibilityAction(
+                    context.getString(R.string.edit_desc, name)
+                ) { onEdit();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.plugin_set_vars, name)
+                ) { onSetVars();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.export_config)
+                ) { onExport();true },
+
+                CustomAccessibilityAction(
+                    context.getString(R.string.clear_cache, name)
+                ) { onClear();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.delete, name)
+                ) { onDelete();true },
+            )
+    }, onClick = {
         if (hasDefVars) onSetVars()
     }) {
         Box(modifier = Modifier.padding(4.dp)) {
