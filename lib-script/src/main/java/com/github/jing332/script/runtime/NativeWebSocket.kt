@@ -51,16 +51,17 @@ class NativeWebSocket constructor(
             val obj = NativeWebSocket()
             obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed)
         }
+
+        private val client by lazy {
+            OkHttpClient.Builder()
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .callTimeout(5, TimeUnit.SECONDS)
+                .build()
+        }
     }
 
-    private val client by lazy {
-        OkHttpClient.Builder()
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .callTimeout(5, TimeUnit.SECONDS)
-            .build()
-    }
 
     private var readyState: Int = WS_CLOSED
     private var ws: WebSocket? = null
@@ -202,9 +203,9 @@ class NativeWebSocket constructor(
 
         logger.trace { "connecting to $url" }
         ws = client.newWebSocket(req, object : WebSocketListener() {
-             override fun onOpen(webSocket: WebSocket, response: Response) {
+            override fun onOpen(webSocket: WebSocket, response: Response) {
                 readyState = WS_OPEN
-                val res = withRhinoContext {  NativeResponse.of(it, scope, response) }
+                val res = withRhinoContext { NativeResponse.of(it, scope, response) }
                 event.emit("open", res)
             }
 
@@ -215,11 +216,13 @@ class NativeWebSocket constructor(
 
             override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
                 val buffer =
-                    withRhinoContext { NativeBuffer.of(
-                        it,
-                        scope,
-                        bytes.toByteArray().toNativeArrayBuffer(it, scope)
-                    ) }
+                    withRhinoContext {
+                        NativeBuffer.of(
+                            it,
+                            scope,
+                            bytes.toByteArray().toNativeArrayBuffer(it, scope)
+                        )
+                    }
 
                 event.emit("message", buffer)
                 event.emit("binary", buffer)

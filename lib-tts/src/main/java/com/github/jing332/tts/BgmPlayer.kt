@@ -39,7 +39,6 @@ class BgmPlayer(val context: SynthesizerContext) : IBgmPlayer {
                         super.onMediaItemTransition(mediaItem, reason)
                         mediaItem?.localConfiguration?.tag?.let { source ->
                             if (source is BgmSource) {
-                                mediaItem?.mediaId
                                 currentSource = source
                                 context.event?.dispatch(NormalEvent.BgmCurrentPlaying(source))
 

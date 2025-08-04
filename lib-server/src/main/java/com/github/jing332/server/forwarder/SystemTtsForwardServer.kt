@@ -2,6 +2,7 @@ package com.github.jing332.server.forwarder
 
 import android.util.Log
 import com.github.jing332.server.BaseCallback
+import com.github.jing332.server.CustomNetty
 import com.github.jing332.server.Server
 import com.github.jing332.server.installPlugins
 import io.ktor.http.ContentType
@@ -14,7 +15,6 @@ import io.ktor.server.application.call
 import io.ktor.server.application.log
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
-import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.origin
 import io.ktor.server.request.httpMethod
 import io.ktor.server.request.receive
@@ -30,7 +30,7 @@ import java.io.File
 
 class SystemTtsForwardServer(val port: Int, val callback: Callback) : Server {
     private val ktor by lazy {
-        embeddedServer(Netty, port = port) {
+        embeddedServer(CustomNetty, port = port) {
             installPlugins()
             intercept(ApplicationCallPipeline.Call) {
                 val method = call.request.httpMethod.value
@@ -42,6 +42,7 @@ class SystemTtsForwardServer(val port: Int, val callback: Callback) : Server {
                     "$method: ${uri.decodeURLQueryComponent()} \n remote: $remoteAddress \n"
                 )
             }
+
 
             routing {
                 staticResources("/", "forwarder")

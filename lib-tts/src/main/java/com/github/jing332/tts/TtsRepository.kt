@@ -30,7 +30,7 @@ internal class TtsRepository(
     override fun getAllTts(): Map<Long, TtsConfiguration> {
         val tp = context.cfg.audioParams()
         val groupWithTts = dbm.systemTtsV2.getAllGroupWithTts()
-        val map = mutableMapOf<Long, TtsConfiguration>()
+        val map = linkedMapOf<Long, TtsConfiguration>()
         val standbyConfigs =
             groupWithTts.flatMap { it.list }
                 .filter { it.isEnabled && (it.config as? TtsConfigurationDTO)?.speechRule?.isStandby == true }

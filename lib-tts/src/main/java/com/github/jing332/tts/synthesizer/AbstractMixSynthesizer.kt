@@ -77,8 +77,8 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
         presetConfigId: Long?,
     ): Result<List<TextSegment>, SynthesisError> {
         val presetConfig: TtsConfiguration? = presetConfigId?.run { repo.getTts(this) }
-        if (presetConfigId != null && presetConfig == null){
-            return  Err(SynthesisError.PresetMissing(presetConfigId))
+        if (presetConfigId != null && presetConfig == null) {
+            return Err(SynthesisError.PresetMissing(presetConfigId))
         }
         textProcessor
             .process(params.text, presetConfig)
@@ -191,11 +191,9 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
         if (mConfigs.isEmpty()) return@coroutineScope Err(SynthesisError.ConfigEmpty)
 
         logger.debug { "onSynthesizeStart: sampleRate=${maxSampleRate}" }
-        callback.onSynthesizeStart(maxSampleRate)
 
         val channel =
             produce<ChannelPayload>(CoroutineName("Synthesis producer"), PROCUDE_CAPACITY) {
-                val sendChannel = this.channel
                 textProcess(params, presetConfigId)
                     .onSuccess { list ->
                         for (segment in list) {
@@ -213,7 +211,13 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
             }
 
         try {
+            var isFirst = true
             for (payload in channel) {
+                if (isFirst && (payload is ChannelPayload.Bytes || payload is ChannelPayload.DirectPlayCallback)) {
+                    callback.onSynthesizeStart(maxSampleRate)
+                    isFirst = false
+                }
+
                 when (payload) {
                     is ChannelPayload.Bytes -> callback.onSynthesizeAvailable(payload.data)
 

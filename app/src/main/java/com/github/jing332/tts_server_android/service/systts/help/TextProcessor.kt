@@ -23,8 +23,7 @@ class TextProcessor : ITextProcessor {
         private val logger = KotlinLogging.logger { this::class.java.name }
     }
 
-    private val isMultiVoice: Boolean
-        get() = SystemTtsConfig.isMultiVoiceEnabled.value
+    private var isMultiVoice: Boolean = false
 
     private val isSplitSentence: Boolean
         get() = SystemTtsConfig.isSplitEnabled.value
@@ -43,14 +42,12 @@ class TextProcessor : ITextProcessor {
         context: Context,
         configs: Map<Long, TtsConfiguration>,
     ): Result<Unit, TextProcessorError> {
+        isMultiVoice = SystemTtsConfig.isMultiVoiceEnabled.value
         if (isMultiVoice) {
             val ruleId = configs.values.toList().component1().speechInfo.tagRuleId
             val speechRule =
-                dbm.speechRuleDao.getByRuleId(ruleId) ?: return Err(
-                    TextProcessorError.MissingRule(
-                        ruleId
-                    )
-                )
+                dbm.speechRuleDao.getByRuleId(ruleId)
+                    ?: return Err(TextProcessorError.MissingRule(ruleId))
             engine = SpeechRuleEngine(context, speechRule).apply { eval() }
             this.configs =
                 configs.entries.map { it.value.copy(speechInfo = it.value.speechInfo.copy(configId = it.key)) }
@@ -110,41 +107,46 @@ class TextProcessor : ITextProcessor {
             }
         }
 
-        if (presetConfig != null) {
-            splitAndAdd(text, presetConfig)
-        } else if (isMultiVoice) {
-            val fragments = try {
-                engine.handleText(replacedText, speechRules)
-            } catch (e: Exception) {
-                return Err(TextProcessorError.HandleText(e))
-            }
-            fragments.forEach { txtWithTag ->
-                if (txtWithTag.text.isNotBlank()) {
-                    val sameTagList = configs.filter {
-                        !it.speechInfo.isStandby && it.speechInfo.tag == txtWithTag.tag
-                    }
-                    val configFromId = sameTagList.find { it.speechInfo.configId == txtWithTag.id }
+        try {
 
-                    // Exact match ID > random match in tag > random match in all
-                    val config = configFromId
-                        ?: sameTagList.randomOrNull(random)
-                        ?: configs.randomOrNull(random)
-                        ?: return Err(
-                            TextProcessorError.MissingConfig(
-                                ConfigType.TAG,
-                                "tag=${txtWithTag.tag}, id=${txtWithTag.id}"
+            if (presetConfig != null) {
+                splitAndAdd(text, presetConfig)
+            } else if (isMultiVoice) {
+                val fragments = engine.handleText(replacedText, speechRules)
+
+                fragments.forEach { txtWithTag ->
+                    if (txtWithTag.text.isNotBlank()) {
+                        val sameTagList = configs.filter {
+                            !it.speechInfo.isStandby && it.speechInfo.tag == txtWithTag.tag
+                        }
+                        val configFromId =
+                            sameTagList.find { it.speechInfo.configId == txtWithTag.id }
+
+                        // Exact match ID > random match in tag > random match in all
+                        val config = configFromId
+                            ?: sameTagList.randomOrNull(random)
+                            ?: configs.randomOrNull(random)
+                            ?: return Err(
+                                TextProcessorError.MissingConfig(
+                                    ConfigType.TAG,
+                                    "tag=${txtWithTag.tag}, id=${txtWithTag.id}"
+                                )
                             )
-                        )
-                    splitAndAdd(txtWithTag.text, config)
+                        splitAndAdd(txtWithTag.text, config)
+                    }
                 }
-            }
-        } else {
-            val singleVoice = configs.randomOrNull(random) ?: return Err(
-                TextProcessorError.MissingConfig(
-                    ConfigType.SINGLE_VOICE, "single voice"
+            } else {
+                val singleVoice = configs.randomOrNull(random) ?: return Err(
+                    TextProcessorError.MissingConfig(
+                        ConfigType.SINGLE_VOICE, "single voice"
+                    )
                 )
-            )
-            splitAndAdd(replacedText, singleVoice)
+                splitAndAdd(replacedText, singleVoice)
+            }
+        } catch (e: UninitializedPropertyAccessException) {
+            return Err(TextProcessorError.Initialization)
+        } catch (e: Exception) {
+            return Err(TextProcessorError.HandleText(e))
         }
 
         return Ok(resultList)

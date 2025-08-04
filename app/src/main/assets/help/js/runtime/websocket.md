@@ -9,11 +9,11 @@ ws.on('close', function(code, reason){ // Int, String
     
 })
 
-ws.on('error', function(err, response){ // String, okio.Response
+ws.on('error', function(err, response){ // String, NativeResponse
     
 })
 
-ws.on('binary', function(byteString){ // okio.ByteString
+ws.on('binary', function(buf){ // Buffer
     
 })
 

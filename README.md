@@ -9,13 +9,8 @@
 
 # TTS Server [![](https://img.shields.io/badge/Q%E7%BE%A4-124841768-blue)](https://jq.qq.com/?_wv=1027&k=y7WCDjEA)
 
-本APP起初为阅读APP的网络朗读所用，在原有基础上，现已支持:
-
-* 内置微软接口(Edge大声朗读、~~Azure演示API~~(已猝) )，可自定义HTTP请求，可导入其他本地TTS引擎，以及根据中文双引号的简单旁白/对话识别朗读
-  ，还有自动重试，备用配置，文本替换等更多功能。
-
 <details>
-  <summary>点击展开查看截图</summary>
+  <summary>查看截图</summary>
 
   <img src="./images/1.jpg" height="150px">
   <img src="./images/2.jpg" height="150px">
@@ -38,28 +33,6 @@ dev: https://jing332.lanzn.com/b09ig9qla
 
 密码Password: 1234
 
-
-# JS
-
-#### 朗读规则
-
-程序已内置旁白对话规则，通过 朗读规则管理 -> 加号 添加。
-
-由用户制作的朗读规则：
-
-1. 可识别角色名的旁白对话规则：
-   打开[此链接](https://www.gitlink.org.cn/geek/src/tree/master/ttsrv-speechRules-multiVoice.json),
-   复制全部内容到剪贴板，然后在规则管理界面导入。
-
-2. 5种语言检测： 复制 [此链接](https://jt12.de/SYV2_1/2023/04/16/10/08/08/1681610888643b588876c09.json),
-   规则管理界面选择网络链接导入。
-
-#### TTS插件
-
-程序已内置Azure官方接口的TTS插件: 插件管理 -> 右上角添加 -> 保存 -> 设置变量 -> 填入Key与Region即可
-
-讯飞WebAPI插件：复制 [此链接](https://jt12.de/SYV2_1/2023/04/16/10/25/17/1681611917643b5c8d61313.json),
-插件管理界面选择网络链接导入，随后设置变量 AppId, ApiKey, ApiSecret即可。
 
 # Grateful
 
