@@ -9,4 +9,5 @@ sealed interface TextProcessorError {
 
     data class HandleText(val error: Throwable) : TextProcessorError
     data class MissingRule(val id: String) : TextProcessorError
+    object Initialization : TextProcessorError
 }

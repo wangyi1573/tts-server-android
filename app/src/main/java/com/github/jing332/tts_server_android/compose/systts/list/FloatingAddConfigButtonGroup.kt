@@ -1,7 +1,6 @@
 package com.github.jing332.tts_server_android.compose.systts.list
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -24,17 +23,21 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.github.jing332.tts_server_android.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -47,22 +50,12 @@ fun FloatingAddConfigButtonGroup(
     addPlugin: () -> Unit,
     addGroup: () -> Unit,
 ) {
-    var expended by remember { mutableStateOf(false) }
-    BackHandler(expended) {
-        expended = false
-    }
-
-
     val context = LocalContext.current
+    var expended by rememberSaveable { mutableStateOf(false) }
+
+    BackHandler(expended) { expended = !expended }
     FloatingActionButtonMenu(
-        modifier = modifier
-//            .background(
-//                if (expended) MaterialTheme.colorScheme.surface.copy(alpha = 0.5f) else Color.Unspecified,
-//                shape = MaterialTheme.shapes.medium
-//            )
-            .clickable(null, null, expended) {
-                expended = false
-            },
+        modifier = modifier,
         expanded = expended,
         button = {
             ToggleFloatingActionButton(
@@ -75,11 +68,13 @@ fun FloatingAddConfigButtonGroup(
                                 R.string.collapsed
                             )
                         contentDescription = context.getString(R.string.add_config)
+                        role = Role.DropdownList
                     }
                     .animateFloatingActionButton(
                         visible = visible || expended,
                         alignment = Alignment.BottomEnd
-                    ),
+                    )
+                    .zIndex(1f),
                 checked = expended,
                 onCheckedChange = { expended = !expended }
             ) {
@@ -130,24 +125,8 @@ fun FloatingAddConfigButtonGroup(
             },
             text = { Text(stringResource(R.string.add_group)) },
             icon = { Icon(Icons.Default.AddCard, null) },
-//            modifier =
-//            Modifier.semantics {
-//                isTraversalGroup = true
-//                // Add a custom a11y action to allow closing the menu when focusing
-//                // the last menu item, since the close button comes before the first
-//                // menu item in the traversal order.
-//                customActions =
-//                    listOf(
-//                        CustomAccessibilityAction(
-//                            label = context.getString(R.string.close),
-//                            action = {
-//                                expended = false
-//                                true
-//                            }
-//                        )
-//                    )
-//            },
         )
+//        }
     }
 }
 

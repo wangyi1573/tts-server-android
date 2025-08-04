@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,10 +44,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -58,6 +63,7 @@ import com.github.jing332.compose.widgets.ShadowedDraggableItem
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.plugin.Plugin
 import com.github.jing332.tts_server_android.R
+import com.github.jing332.tts_server_android.compose.AppDefaultProperties
 import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.SharedViewModel
 import com.github.jing332.tts_server_android.compose.systts.ConfigDeleteDialog
@@ -122,72 +128,79 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         navController.navigate(NavRoutes.PluginEdit.id)
     }
 
-    Scaffold(Modifier.fillMaxSize(), topBar = {
-        TopAppBar(
-            title = { Text(stringResource(id = R.string.plugin_manager)) },
-            navigationIcon = {
-                IconButton(onClick = onFinishActivity) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        stringResource(id = R.string.nav_back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(onClick = {
-                    onEdit()
-                }) {
-                    Icon(Icons.Default.Add, stringResource(id = R.string.add_config))
-                }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-                var showOptions by remember { mutableStateOf(false) }
-                IconButton(onClick = {
-                    showOptions = true
-                }) {
-                    Icon(Icons.Default.MoreVert, stringResource(id = R.string.more_options))
-
-                    DropdownMenu(
-                        expanded = showOptions,
-                        onDismissRequest = { showOptions = false }) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(id = R.string.import_config)) },
-                            onClick = {
-                                showOptions = false
-                                showImportConfig = true
-                            },
-                            leadingIcon = {
-                                Icon(Icons.AutoMirrored.Filled.Input, null)
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(stringResource(id = R.string.export_config)) },
-                            onClick = {
-                                showOptions = false
-                                showExportConfig = dbm.pluginDao.allEnabled
-                            },
-                            leadingIcon = {
-                                Icon(Icons.Default.Output, null)
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(stringResource(id = R.string.desktop_shortcut)) },
-                            onClick = {
-                                showOptions = false
-                                MyTools.addShortcut(
-                                    context,
-                                    context.getString(R.string.plugin_manager),
-                                    "plugin",
-                                    R.drawable.ic_shortcut_plugin,
-                                    Intent(context, PluginManagerActivity::class.java)
-                                )
-                            },
-                            leadingIcon = { Icon(Icons.Default.AppShortcut, null) }
+    Scaffold(contentWindowInsets = WindowInsets(0),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                scrollBehavior = scrollBehavior,
+                title = { Text(stringResource(id = R.string.plugin_manager)) },
+                navigationIcon = {
+                    IconButton(onClick = onFinishActivity) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            stringResource(id = R.string.nav_back)
                         )
                     }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        onEdit()
+                    }) {
+                        Icon(Icons.Default.Add, stringResource(id = R.string.add_config))
+                    }
+
+                    var showOptions by remember { mutableStateOf(false) }
+                    IconButton(onClick = {
+                        showOptions = true
+                    }) {
+                        Icon(Icons.Default.MoreVert, stringResource(id = R.string.more_options))
+
+                        DropdownMenu(
+                            expanded = showOptions,
+                            onDismissRequest = { showOptions = false }) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.import_config)) },
+                                onClick = {
+                                    showOptions = false
+                                    showImportConfig = true
+                                },
+                                leadingIcon = {
+                                    Icon(Icons.AutoMirrored.Filled.Input, null)
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.export_config)) },
+                                onClick = {
+                                    showOptions = false
+                                    showExportConfig = dbm.pluginDao.allEnabled
+                                },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Output, null)
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.desktop_shortcut)) },
+                                onClick = {
+                                    showOptions = false
+                                    MyTools.addShortcut(
+                                        context,
+                                        context.getString(R.string.plugin_manager),
+                                        "plugin",
+                                        R.drawable.ic_shortcut_plugin,
+                                        Intent(context, PluginManagerActivity::class.java)
+                                    )
+                                },
+                                leadingIcon = { Icon(Icons.Default.AppShortcut, null) }
+                            )
+                        }
+                    }
                 }
-            }
-        )
-    }) { paddingValues ->
+            )
+        }) { paddingValues ->
         val flowAll = remember { dbm.pluginDao.flowAll().conflate() }
         val list by flowAll.collectAsStateWithLifecycle(emptyList())
 
@@ -241,6 +254,10 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                     )
                 }
             }
+
+            item {
+                Spacer(Modifier.padding(bottom = AppDefaultProperties.LIST_END_PADDING))
+            }
         }
     }
 }
@@ -262,7 +279,27 @@ private fun Item(
     onDelete: () -> Unit,
 ) {
     val context = LocalContext.current
-    ElevatedCard(modifier = modifier, onClick = {
+    ElevatedCard(modifier = modifier.semantics {
+        customActions =
+            listOf(
+                CustomAccessibilityAction(
+                    context.getString(R.string.edit_desc, name)
+                ) { onEdit();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.plugin_set_vars, name)
+                ) { onSetVars();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.export_config)
+                ) { onExport();true },
+
+                CustomAccessibilityAction(
+                    context.getString(R.string.clear_cache, name)
+                ) { onClear();true },
+                CustomAccessibilityAction(
+                    context.getString(R.string.delete, name)
+                ) { onDelete();true },
+            )
+    }, onClick = {
         if (hasDefVars) onSetVars()
     }) {
         Box(modifier = Modifier.padding(4.dp)) {

@@ -1,13 +1,12 @@
-version-1
-
-### 此帮助文档可在左侧滑菜单打开。
+version-2
 
 [![Q群](https://img.shields.io/badge/Q%E7%BE%A4-124841768-blue.svg)](https://jq.qq.com/?_wv=1027&k=y7WCDjEA) 
 [![Issue](https://img.shields.io/badge/Github-Issue-greeb.svg)](https://github.com/jing332/tts-server-android/issues)
 [![Dev](https://img.shields.io/github/actions/workflow/status/jing332/tts-server-android/test.yml?label=%E5%BC%80%E5%8F%91%E7%89%88)](https://github.com/jing332/tts-server-android/actions/workflows/test.yml)
 
 # TTS Server 
-本应用有3个独立功能，通过左侧滑菜单进行切换。
+本APP不提供语音合成服务，只是个网络TTS的搬运工，
+通过插件驱动调用网络上的TTS接口。
 
 
 ##  1️⃣ 系统TTS
@@ -46,19 +45,8 @@ version-1
 ### 2. 段落间隔时间长？
 > 一般是由于网络延迟原因，因为 安卓系统TTS 服务的技术限制，导致无法预缓存音频，故每次只能同步获取。
 
-### 3. 启动朗读时提示 `⚠️ 缺少{朗读全部}，...` ?
-> 添加一个`朗读全部`类型的TTS配置并启用。或尝试开启多语音选项使用 `标签`配置
-
-### 4. 启动朗读时提示 `⚠️无标签配置，...！`
-> 添加一个 `标签` 类型的TTS配置并启用。或尝试关闭多语音选项使用 `朗读全部` 。
 
 
-## 2️⃣ 系统TTS转发器
-用于将安卓系统TTS转为HTTP网络接口形式，便于在网页调用。
-
-## 3️⃣ 微软TTS转发器
-用于将Edge大声朗读接口简化为HTTP网络接口形式，便于`开源阅读`进行调用。
-
-这也是`TTS Server`名称的来源:
-
-早期，我将 tts-server-go 移植到安卓，即得名 tts-server-android (Github项目名)
+## 2️⃣ TTS转发器
+用于将安卓系统TTS转为HTTP网络接口形式，便于在网页调用。  
+**配合阅读APP的网络TTS引擎调用，可变相实现预缓存一章的音频，提高段落间流畅度。**

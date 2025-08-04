@@ -19,13 +19,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AudioFile
 import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -39,13 +39,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.github.jing332.common.utils.ASFUriUtils.getPath
 import com.github.jing332.common.utils.FileUtils.audioList
 import com.github.jing332.common.utils.toScale
@@ -56,10 +56,7 @@ import com.github.jing332.compose.widgets.LabelSlider
 import com.github.jing332.database.entities.systts.BgmConfiguration
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.systts.list.IntSlider
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.BasicInfoEditScreen
-import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.SpeechRuleEditScreen
-import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.TtsTopAppBar
 import com.github.jing332.tts_server_android.ui.AppActivityResultContracts
 import com.github.jing332.tts_server_android.ui.ExoPlayerActivity
 import com.github.jing332.tts_server_android.ui.FilePickerActivity
@@ -72,13 +69,15 @@ import java.io.File
 class BgmConfigUI : IConfigUI() {
     override val showSpeechEdit: Boolean = false
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun FullEditScreen(
         modifier: Modifier,
         systemTts: SystemTtsV2,
         onSystemTtsChange: (SystemTtsV2) -> Unit,
         onSave: () -> Unit,
-        onCancel: () -> Unit
+        onCancel: () -> Unit,
+        content: @Composable () -> Unit,
     ) {
         val config = systemTts.config as BgmConfiguration
 
@@ -131,90 +130,93 @@ class BgmConfigUI : IConfigUI() {
         }
 
         val saveSignal = remember { mutableStateOf<(() -> Unit)?>(null) }
-        Scaffold(topBar = {
-            TtsTopAppBar(
-                title = { Text(text = stringResource(id = R.string.edit_bgm_tts)) },
-                onBackAction = onCancel,
-                onSaveAction = {
-                    saveSignal.value?.invoke()
-                    onSave()
-                }
+        DefaultFullEditScreen(
+            modifier,
+            title = stringResource(id = R.string.edit_bgm_tts),
+            verticalScrollEnabled = false,
+            onCancel = onCancel,
+            onSave = {
+                saveSignal.value?.invoke()
+                onSave()
+            }
+        ) {
+            BasicInfoEditScreen(
+                modifier = Modifier.padding(8.dp),
+                systemTts = systemTts,
+                onSystemTtsChange = onSystemTtsChange
             )
-        }) { paddingValues ->
-            Column(Modifier.padding(paddingValues)) {
-                BasicInfoEditScreen(
-                    modifier = Modifier,
-                    systemTts = systemTts,
-                    onSystemTtsChange = onSystemTtsChange
-                )
-                ParamsEditScreen(
-                    modifier = Modifier.fillMaxWidth(),
-                    systemTts = systemTts,
-                    onSystemTtsChange = onSystemTtsChange
-                )
 
-                OutlinedCard(
+            ParamsEditScreen(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                systemTts = systemTts,
+                onSystemTtsChange = onSystemTtsChange
+            )
+
+            OutlinedCard(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                FilesAccessPermissionContent(Modifier.fillMaxWidth())
+
+                Row(
+                    Modifier.align(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = {
+                        filePicker.launch(
+                            FilePickerActivity.RequestSelectFile(
+                                fileMimes = listOf("audio/*")
+                            )
+                        )
+                    }) {
+                        Icon(Icons.Default.AudioFile, null)
+                        Text(stringResource(id = R.string.add_file))
+                    }
+                    VerticalDivider(Modifier.height(16.dp))
+                    TextButton(onClick = {
+                        filePicker.launch(
+                            FilePickerActivity.RequestSelectDir()
+                        )
+                    }) {
+                        Icon(Icons.Default.CreateNewFolder, null)
+                        Text(stringResource(id = R.string.add_folder))
+                    }
+                }
+
+                LazyColumn(
                     Modifier
-                        .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    FilesAccessPermissionContent(Modifier.fillMaxWidth())
-
-                    Row(
-                        Modifier.align(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        TextButton(onClick = {
-                            filePicker.launch(
-                                FilePickerActivity.RequestSelectFile(
-                                    fileMimes = listOf("audio/*")
-                                )
-                            )
-                        }) {
-                            Icon(Icons.Default.AudioFile, null)
-                            Text(stringResource(id = R.string.add_file))
-                        }
-                        VerticalDivider(Modifier.height(16.dp))
-                        TextButton(onClick = {
-                            filePicker.launch(
-                                FilePickerActivity.RequestSelectDir()
-                            )
-                        }) {
-                            Icon(Icons.Default.CreateNewFolder, null)
-                            Text(stringResource(id = R.string.add_folder))
-                        }
-                    }
-
-                    LazyColumn(Modifier.padding(8.dp)) {
-                        items(config.musicList) { item ->
-                            Row(
-                                Modifier
-                                    .clip(MaterialTheme.shapes.small)
-                                    .clickableRipple {
-                                        showMusicList = item
-                                    }
-                            ) {
-                                Text(
-                                    item,
-                                    modifier = Modifier.weight(1f),
-                                    lineHeight = LocalTextStyle.current.lineHeight * 0.8
-                                )
-                                IconButton(onClick = {
-                                    onSystemTtsChange(
-                                        systemTts.copy(
-                                            config = config.copy(
-                                                musicList = config.musicList.toMutableList()
-                                                    .apply { remove(item) }
-                                            ),
-                                        )
-                                    )
-                                }) {
-                                    Icon(
-                                        Icons.Default.DeleteForever,
-                                        stringResource(id = R.string.delete),
-                                        tint = MaterialTheme.colorScheme.error
-                                    )
+                    items(config.musicList) { item ->
+                        Row(
+                            Modifier
+                                .clip(MaterialTheme.shapes.small)
+                                .clickableRipple {
+                                    showMusicList = item
                                 }
+                        ) {
+                            Text(
+                                item,
+                                modifier = Modifier.weight(1f),
+                                lineHeight = LocalTextStyle.current.lineHeight * 0.8
+                            )
+                            IconButton(onClick = {
+                                onSystemTtsChange(
+                                    systemTts.copy(
+                                        config = config.copy(
+                                            musicList = config.musicList.toMutableList()
+                                                .apply { remove(item) }
+                                        ),
+                                    )
+                                )
+                            }) {
+                                Icon(
+                                    Icons.Default.DeleteForever,
+                                    stringResource(id = R.string.delete),
+                                    tint = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
                     }
@@ -227,7 +229,7 @@ class BgmConfigUI : IConfigUI() {
     override fun ParamsEditScreen(
         modifier: Modifier,
         systemTts: SystemTtsV2,
-        onSystemTtsChange: (SystemTtsV2) -> Unit
+        onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
         val config = systemTts.config as BgmConfiguration
 
@@ -237,7 +239,7 @@ class BgmConfigUI : IConfigUI() {
                 if (config.volume == 0f) stringResource(id = R.string.follow) else config.volume.toString()
             )
         LabelSlider(
-            modifier = Modifier.padding(top = 8.dp),
+            modifier = modifier.padding(vertical = 12.dp),
             text = volStr, value = config.volume.toFloat(),
             onValueChange = {
                 onSystemTtsChange(systemTts.copy(config = config.copy(volume = it.toScale(2))))

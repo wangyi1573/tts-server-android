@@ -28,12 +28,12 @@ internal fun BasicConfigScreen(
     intentFilter: IntentFilter,
     actionOnLog: String,
     actionOnClosed: String,
-    actionOnStarting: String,
+    actionOnStarted: String,
     isRunning: Boolean,
     onRunningChange: (Boolean) -> Unit,
     switch: () -> Unit,
     port: Int,
-    onPortChange: (Int) -> Unit
+    onPortChange: (Int) -> Unit,
 ) {
     val context = LocalContext.current
     LocalBroadcastReceiver(intentFilter = intentFilter) { intent ->
@@ -50,7 +50,7 @@ internal fun BasicConfigScreen(
                 vm.logs.add(LogEntry(level = LogLevel.INFO, message = "服务已关闭"))
             }
 
-            actionOnStarting -> {
+            actionOnStarted -> {
                 onRunningChange(true)
                 vm.logs.add(LogEntry(level = LogLevel.INFO, message = "服务已启动"))
             }
@@ -64,7 +64,7 @@ internal fun BasicConfigScreen(
 
         Row(Modifier.align(Alignment.CenterHorizontally)) {
             DenseOutlinedField(
-                label = { Text(stringResource(id = R.string.listen_port)) },
+                label = { Text(stringResource(R.string.listen_port)) },
                 modifier = Modifier.align(Alignment.CenterVertically),
                 value = port.toString(), onValueChange = {
                     kotlin.runCatching {
