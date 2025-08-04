@@ -314,9 +314,12 @@ class AndroidTtsEngine(
         val tts = mTts ?: return@withLock Err(TtsEngineError.Initialization)
 
         val bundle = setEnginePlayParams(tts, locale, voice, extraParams, params)
-        // The [utteranceId] Cannot be null, it will cause no [OnUtteranceProgressListener]
-        val ret = tts.speak(text, queueMode, bundle, "")
-        if (ret != TextToSpeech.SUCCESS) return@withLock Err(TtsEngineError.Engine)
+        // 使用唯一标识符作为utteranceId
+        val utteranceId = UUID.randomUUID().toString()
+        val ret = tts.speak(text, queueMode, bundle, utteranceId)
+        if (ret != TextToSpeech.SUCCESS) {
+            return@withLock Err(TtsEngineError.Engine)
+        }
 
         suspendCancellableCoroutine<Result<Unit, TtsEngineError>> { continuation ->
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {

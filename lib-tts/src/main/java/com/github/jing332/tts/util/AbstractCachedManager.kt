@@ -9,8 +9,8 @@ abstract class AbstractCachedManager<K, V>(timeout: Long, delay: Long) {
     init {
         cache.schedulePrune(delay)
         cache.setListener { k, v ->
-            if (onCacheRemove(k, v))
-                cache.put(k, v) // 隐患 迭代时修改
+            onCacheRemove(k, v)
+            // 移除了潜在的并发修改操作
         }
     }
 
