@@ -60,7 +60,7 @@
 
     <string name="service_started">服务已启动</string>
     <string name="service_closed">服务已关闭</string>
-    <string name="forwarder_ms">微软TTS转发器</string>
+
     <string name="server_listen_address_local">监听地址：%s</string>
     <string name="server_please_start_service">请先启动服务</string>
     <string name="server_restart_service_to_update">重启服务以生效</string>
@@ -268,10 +268,10 @@
     <string name="follow_system">跟随系统</string>
     <string name="app_language_desc">一语言：%1$s</string>
     <string name="app_language_to_follow_tip_msg">如更新语言失败，请手动结束程序并重启。</string>
-    <string name="forwarder_sys_fail_audio_file">合成失败：未找到音频文件</string>
+
     <string name="systts_engine_init_failed_timeout">引擎初始化失败：已超时</string>
-    <string name="forwarder_systts">TTS转发器</string>
-    <string name="forwarder_sys_running">TTS转发器运行中</string>
+
+
     <string name="language">语言</string>
     <string name="plugin_manager">插件管理</string>
     <string name="error">错误</string>

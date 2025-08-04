@@ -52,12 +52,8 @@ import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.SystemNotificationConst
 import com.github.jing332.tts_server_android.service.systts.help.TextProcessor
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.onSuccess
-import com.github.michaelbull.result.runCatching
+import com.github.jing332.tts_server_android.service.systts.help.TextReplacer
+import com.github.jing332.tts_server_android.utils.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -151,25 +147,32 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     fun initManager() {
         logger.debug { "initialize or load configruation" }
         mScope.launch {
-            mTtsManager = mTtsManager ?: MixSynthesizer.global.apply {
-                context.androidContext = appCtx
-                context.event = this@SystemTtsService
-                context.cfg = SynthesizerConfig(
-                    requestTimeout = SysTtsConfig::requestTimeout,
-                    maxRetryTimes = SysTtsConfig::maxRetryCount,
-                    streamPlayEnabled = SysTtsConfig::isStreamPlayModeEnabled,
-                    silenceSkipEnabled = SysTtsConfig::isSkipSilentAudio,
-                    bgmShuffleEnabled = SysTtsConfig::isBgmShuffleEnabled,
-                    bgmVolume = SysTtsConfig::bgmVolume,
-                    audioParams = {
-                        AudioParams(
-                            speed = SysTtsConfig.audioParamsSpeed,
-                            volume = SysTtsConfig.audioParamsVolume,
-                            pitch = SysTtsConfig.audioParamsPitch
+            mTtsManager = mTtsManager ?: run {
+                // 创建新的实例而不是使用全局单例
+                MixSynthesizer(
+                    SynthesizerContext(
+                        androidContext = appCtx,
+                        logger = logger,
+                        cfg = SynthesizerConfig(
+                            requestTimeout = SysTtsConfig::requestTimeout,
+                            maxRetryTimes = SysTtsConfig::maxRetryCount,
+                            streamPlayEnabled = SysTtsConfig::isStreamPlayModeEnabled,
+                            silenceSkipEnabled = SysTtsConfig::isSkipSilentAudio,
+                            bgmShuffleEnabled = SysTtsConfig::isBgmShuffleEnabled,
+                            bgmVolume = SysTtsConfig::bgmVolume,
+                            audioParams = {
+                                AudioParams(
+                                    speed = SysTtsConfig.audioParamsSpeed,
+                                    volume = SysTtsConfig.audioParamsVolume,
+                                    pitch = SysTtsConfig.audioParamsPitch
+                                )
+                            }
                         )
-                    }
-                )
-                textProcessor = mTextProcessor
+                    )
+                ).apply {
+                    context.event = this@SystemTtsService
+                    textProcessor = mTextProcessor
+                }
             }
 
             mTtsManager!!.init()
